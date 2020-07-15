@@ -1,3 +1,3 @@
-Feature-1 for main menu code.
+Feature-2: Menu for Room creating
 Leśniewski Paweł
 Uceluj w dziesiątkę 2020
