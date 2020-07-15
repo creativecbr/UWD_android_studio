@@ -7,4 +7,10 @@
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut ipsum sodales, vehicula turpis in, vestibulum mi. Mauris diam ex, pharetra bibendum odio sed, pellentesque tempus orci. Ut pharetra lorem a malesuada congue. Proin odio lacus, pharetra vitae pulvinar at, consectetur malesuada sapien. Curabitur a ipsum nec erat varius facilisis eu quis augue. Nulla quis justo et elit finibus consectetur a eget ipsum. Suspendisse tincidunt sem eros, fermentum congue nisl egestas non. Morbi facilisis lectus orci, ut tempor sem maximus aliquet. </string>
 
     <string name="backButton">wróć</string>
+    <string name="nextButton">dalej</string>
+    <string name="createRoom">stwórz pokój</string>
+    <string name="joinToRoom">dołącz do pokoju</string>
+
+    <string name="putRoomName">Wpisz nazwę twojego pokoju:</string>
+    <string name="exampleRoomName">room112</string>
 </resources>
