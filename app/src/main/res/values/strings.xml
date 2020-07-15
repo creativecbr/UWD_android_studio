@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">UWD_android_studio</string>
+    <string name="app_name">Uceluj w dziesiątkę</string>
+    <string name="friendsGame">Graj ze znajomymi</string>
+    <string name="networkGame">Graj w sieci</string>
+    <string name="aboutAuthor">o twórcy</string>
+    <string name="howToPlay">jak grać</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ut ipsum sodales, vehicula turpis in, vestibulum mi. Mauris diam ex, pharetra bibendum odio sed, pellentesque tempus orci. Ut pharetra lorem a malesuada congue. Proin odio lacus, pharetra vitae pulvinar at, consectetur malesuada sapien. Curabitur a ipsum nec erat varius facilisis eu quis augue. Nulla quis justo et elit finibus consectetur a eget ipsum. Suspendisse tincidunt sem eros, fermentum congue nisl egestas non. Morbi facilisis lectus orci, ut tempor sem maximus aliquet. </string>
+
+    <string name="backButton">wróć</string>
 </resources>
