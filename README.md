@@ -1,3 +1,3 @@
-Feature-2: Menu for Room creating
+Feature-3: Bluetooth game server service.
 Leśniewski Paweł
 Uceluj w dziesiątkę 2020
