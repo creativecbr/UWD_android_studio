@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="menuButtonMargin">20dp</dimen>
+    <dimen name="buttonWidth">220dp</dimen>
+    <dimen name="buttonHeight">45dp</dimen>
+    <dimen name="logoTopMargin">300dp</dimen>
+    <dimen name="menuButtonsMargin">25dp</dimen>
+</resources>
