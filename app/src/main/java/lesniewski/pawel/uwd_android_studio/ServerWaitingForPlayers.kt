@@ -9,8 +9,9 @@ class ServerWaitingForPlayers : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_server_waiting_for_players)
-
         showRoomName()
+
+
     }
 
 
