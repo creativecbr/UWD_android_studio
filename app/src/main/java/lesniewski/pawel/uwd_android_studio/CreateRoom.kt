@@ -22,8 +22,9 @@ class CreateRoom : AppCompatActivity(), IFragmentChanger {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_room)
+      super.onCreate(savedInstanceState)
+      setContentView(R.layout.activity_create_room)
+      bAdapter = getDefaultAdapter()
 
       // back button service
       var btn = findViewById<View>(R.id.backButton) as Button
@@ -41,14 +42,23 @@ class CreateRoom : AppCompatActivity(), IFragmentChanger {
   }
   fun goToServerWaitingActivity()
   {
+      val roomName =  getInputRoomName()
+
+      bAdapter.name = roomName
       val intent = Intent(this, ServerWaitingForPlayers::class.java)
-      intent.putExtra("roomName", inputRoomName.text.toString())
+      intent.putExtra("roomName", roomName)
       startActivity(intent)
   }
-  fun bluetoothRequestIfDisabled(){
 
-      bAdapter = getDefaultAdapter()
-
+    fun getInputRoomName(): String {
+        val tmp = inputRoomName.text.toString()
+        if(tmp!="")
+            return tmp
+        else
+            return "room_997"
+    }
+  fun bluetoothRequestIfDisabled()
+  {
       if(!bAdapter.isEnabled)
       {
           val blInt = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
