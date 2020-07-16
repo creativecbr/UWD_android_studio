@@ -8,9 +8,11 @@
 
     <string name="backButton">wróć</string>
     <string name="nextButton">dalej</string>
+    <string name="scanButton">skanuj</string>
     <string name="createRoom">stwórz pokój</string>
     <string name="joinToRoom">dołącz do pokoju</string>
 
     <string name="putRoomName">Wpisz nazwę twojego pokoju:</string>
     <string name="exampleRoomName">room112</string>
+    <string name="refreshButton">odśwież</string>
 </resources>
