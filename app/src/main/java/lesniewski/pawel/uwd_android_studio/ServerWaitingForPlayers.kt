@@ -1,17 +1,20 @@
 package lesniewski.pawel.uwd_android_studio
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_server_waiting_for_players.*
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -22,6 +25,9 @@ class ServerWaitingForPlayers : AppCompatActivity()
     private var PLAYER_LIMIT = 6
     private val APP_UUID = UUID.fromString("3b4c7719-3738-4234-94a3-22d72dbb8a74")
     private val REQUEST_CODE_ENABLE_BT: Int = 1
+    private val REQUEST_CODE_ENABLE_DISCOVERABILTY: Int = 2
+    private val DISCOVERABLE_DURATION = 120 // in seconds
+
 
     val STATE_LISTENING = 1
     val STATE_CONNECTING = 2
@@ -48,7 +54,7 @@ class ServerWaitingForPlayers : AppCompatActivity()
         showRoomNameAndPlayerLimit()
         limitPlayersAmount(6)
         connectListToSockets()
-
+        discoverabilityButtonService()
        /*
 
         refreshButton.setOnClickListener{
@@ -61,12 +67,50 @@ class ServerWaitingForPlayers : AppCompatActivity()
         }*/
     }
 
+    private fun discoverabilityButtonService() {
+
+        refreshButton.setOnClickListener{
+
+            val intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+            intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, DISCOVERABLE_DURATION)
+            startActivityForResult(intent, REQUEST_CODE_ENABLE_DISCOVERABILTY)
+
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data:Intent?) {
+
+        when(requestCode)
+        {
+            REQUEST_CODE_ENABLE_DISCOVERABILTY ->
+                if (resultCode == Activity.RESULT_CANCELED)
+                {
+                    Toast.makeText(this, "Musisz być widoczny, aby inni gracze dołączyli do ciebie.", Toast.LENGTH_LONG).show()
+                }
+                else
+                {
+                    refreshButton.isEnabled = false
+                    refreshButton.text = resources.getString(R.string.discoverableNow)
+
+                    Handler().postDelayed(Runnable {
+                        refreshButton.text = resources.getString(R.string.refreshButton)
+                        refreshButton.isEnabled = true
+
+                    }, DISCOVERABLE_DURATION.toLong() * 1000)
+                }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+
     private fun connectListToSockets() {
-        adapter = ArrayAdapter<String>(
+       var test = arrayOf("xd", "ten", "iphone")
+       adapter = ArrayAdapter<String>(
             this,
             android.R.layout.simple_list_item_1,
-            strings
+            test // change to strings!!!!!!
         )
+
         pairedList.adapter = adapter
     }
 

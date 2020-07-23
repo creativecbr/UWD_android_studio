@@ -17,4 +17,6 @@
     <string name="refreshButton">odśwież</string>
     <string name="maxPlayersInfo">Maksymalna ilość graczy: </string>
     <string name="connectedPlayersInfo">Połączyło się: </string>
+    <string name="findRoomBaner">Wybierz dostępny pokój:</string>
+    <string name="discoverableNow">Widoczny</string>
 </resources>

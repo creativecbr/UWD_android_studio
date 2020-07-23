@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 
-class GameRoomChoosing : Fragment(), IFragmentChanger {
+class GameDeviceTypeChoosing : Fragment(), IFragmentChanger {
 
     private val REQUEST_CODE_ENABLE_BT: Int = 1
     lateinit var bAdapter:BluetoothAdapter
@@ -24,7 +24,7 @@ class GameRoomChoosing : Fragment(), IFragmentChanger {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View?{
-        val v = inflater.inflate(R.layout.fragment_game_room_choosing, container, false)
+        val v = inflater.inflate(R.layout.fragment_game_device_type_choosing, container, false)
 
         val btn = v.findViewById<View>(R.id.backButton) as Button
         btn.setOnClickListener{
