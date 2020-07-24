@@ -19,34 +19,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/major_regular"
-        android:text="@string/findRoomBaner"
+        android:text="@string/chooseAvailableRoomBaner"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <ListView
-        android:id="@+id/pairedDevicesList"
+        android:id="@+id/foundDevicesList"
         style="@style/Widget.AppCompat.ListView.Menu"
         android:layout_width="192dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="6dp"
         android:fontFamily="@font/major_regular"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seachRoomBaner">
+        app:layout_constraintTop_toBottomOf="@+id/connectStatus">
 
     </ListView>
 
     <Button
-        android:id="@+id/refreshButton"
+        android:id="@+id/scanButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/buttonHeight"
         android:layout_marginBottom="28dp"
         android:background="@drawable/shadow"
         android:fontFamily="@font/major_regular"
-        android:text="@string/refreshButton"
+        android:text="@string/scanButton"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/nextButton"
@@ -63,7 +62,7 @@
         android:text="@string/backButton"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/refreshButton"
+        app:layout_constraintEnd_toStartOf="@+id/scanButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -79,6 +78,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/refreshButton" />
+        app:layout_constraintStart_toEndOf="@+id/scanButton" />
+
+    <TextView
+        android:id="@+id/connectStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/connectStatusBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seachRoomBaner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
