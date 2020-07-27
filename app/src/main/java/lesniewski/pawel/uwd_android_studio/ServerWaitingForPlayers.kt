@@ -72,13 +72,13 @@ class ServerWaitingForPlayers : AppCompatActivity()
         }*/
     }
 
-    val scanModeReceiver = object: BroadcastReceiver() {
+    private val scanModeReceiver = object: BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
         override fun onReceive(p0: Context?, intent: Intent?) {
-            var action = intent?.action
+            val action = intent?.action
             if(action.equals(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED))
             {
-                var modeValue =
+                val modeValue =
                     intent?.getIntExtra(BluetoothAdapter.EXTRA_SCAN_MODE, BluetoothAdapter.ERROR)
 
                 if(modeValue == BluetoothAdapter.SCAN_MODE_CONNECTABLE)
@@ -128,26 +128,13 @@ class ServerWaitingForPlayers : AppCompatActivity()
                 {
                     Toast.makeText(this, "Musisz być widoczny, aby inni gracze dołączyli do ciebie.", Toast.LENGTH_LONG).show()
                 }
-              /*  else
-                {
-                    refreshButton.isEnabled = false
-                    refreshButton.text = resources.getString(R.string.discoverableNow)
-
-                    Handler().postDelayed(Runnable {
-                        refreshButton.text = resources.getString(R.string.refreshButton)
-                        refreshButton.isEnabled = true
-
-                    }, DISCOVERABLE_DURATION.toLong() * 1000)
-                }
-
-               */
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
 
 
     private fun connectListToSockets() {
-       var test = arrayOf("xd", "ten", "iphone")
+       val test = arrayOf("xd", "ten", "iphone")
        adapter = ArrayAdapter<String>(
             this,
             android.R.layout.simple_list_item_1,
@@ -198,13 +185,13 @@ class ServerWaitingForPlayers : AppCompatActivity()
 
         @SuppressLint("SetTextI18n")
         override fun run() {
-            var sockets: ArrayList<BluetoothSocket> = ArrayList()
+            val sockets: ArrayList<BluetoothSocket> = ArrayList()
             var limit = PLAYER_LIMIT
             var cnt = 0
 
             while(limit>0)
             {
-                var tmpSocket:BluetoothSocket = serverSocket.accept()
+                val tmpSocket:BluetoothSocket = serverSocket.accept()
                 sockets.add(tmpSocket)
                 connectedInfo.text = resources.getString(R.string.connectedPlayersInfo) + cnt.toString()
 

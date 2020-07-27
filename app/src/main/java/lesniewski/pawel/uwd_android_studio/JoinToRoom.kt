@@ -1,85 +1,126 @@
 package lesniewski.pawel.uwd_android_studio
 
+
+import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
+
 class JoinToRoom : AppCompatActivity() {
 
-    var TAG:String="aplka"
+    var TAG:String="JoinToRoom"
+    private var DISCOVERABLE_DURATION = 0
+    private var REQUEST_CODE_ENABLE_DISCOVERABILTY = 2
     lateinit var scanButton: Button
+    lateinit var nextButton: Button
     lateinit var lvDevicesList: ListView
     lateinit var connectStatus: TextView
-    var BTDevices = ArrayList<BluetoothDevice>()
-    var arrayAdapter: ArrayAdapter<BluetoothDevice>? = null
+    var btDevices = ArrayList<BluetoothDevice>()
     var bAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+    lateinit var deviceListAdapter : DeviceListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_join_to_room)
 
-        scanButton = findViewById(R.id.scanButton)
-        lvDevicesList = findViewById(R.id.foundDevicesList)
-        connectStatus = findViewById(R.id.connectStatus)
+        this.scanButton = findViewById(R.id.scanButton)
+        this.lvDevicesList = findViewById(R.id.foundDevicesList)
+        this.connectStatus = findViewById(R.id.connectStatus)
+        this.nextButton = findViewById(R.id.nextButton)
 
-        arrayAdapter =  ArrayAdapter<BluetoothDevice>(
-            this,
-            android.R.layout.simple_list_item_1,
-            BTDevices
-        )
-        lvDevicesList.adapter = arrayAdapter
+        this.nextButton.setOnClickListener{
 
-        scanButton.setOnClickListener {
+        }
 
-            if(bAdapter.isDiscovering)
+        this.scanButton.setOnClickListener{
+
+            if(this.bAdapter.isDiscovering)
             {
-                bAdapter.cancelDiscovery()
-                bAdapter.startDiscovery()
-                var discoverIntentFilter:IntentFilter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-                registerReceiver(scanReceiver, discoverIntentFilter)
+                this.bAdapter.cancelDiscovery()
+                checkBTPermissions();
+                this.bAdapter.startDiscovery()
+
+                val findingIntentFilter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+                registerReceiver(this.scanReceiver, findingIntentFilter)
+
             }
-            if(!bAdapter.isDiscovering)
+            if(!this.bAdapter.isDiscovering)
             {
+                checkBTPermissions();
                 bAdapter.startDiscovery()
-                var discoverIntentFilter:IntentFilter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-                registerReceiver(scanReceiver, discoverIntentFilter)
+                val findingIntentFilter  = IntentFilter(BluetoothDevice.ACTION_FOUND)
+                registerReceiver(this.scanReceiver, findingIntentFilter)
             }
         }
 
     }
 
-    val scanReceiver = object: BroadcastReceiver() {
+    override fun onDestroy() {
+
+        super.onDestroy()
+        unregisterReceiver(scanReceiver)
+        bAdapter.cancelDiscovery();
+    }
+
+    private val scanReceiver = object: BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
         override fun onReceive(ctx: Context?, intent: Intent?) {
-            var action: String? = intent?.action
-            Log.d(TAG, "action found")
+            val action: String? = intent?.action
+            connectStatus.text = "mam"
             if(BluetoothDevice.ACTION_FOUND == action)
             {
 
-                var device: BluetoothDevice? = intent?.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                 if (device != null) {
-                    scanButton.text = device.name
-                    BTDevices.add(device)
+
+                    if(!btDevices.contains(device))
+                    {
+                        btDevices.add(device)
+                        val mDeviceListAdapter = DeviceListAdapter(ctx!!, R.layout.device_adapter_view, this@JoinToRoom.btDevices)
+                        lvDevicesList.adapter = mDeviceListAdapter
+                    }
                 }
-                arrayAdapter?.notifyDataSetChanged()
             }
-
         }
-
     }
 
 
+    private fun checkBTPermissions() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            var permissionCheck =
+                checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION")
+            permissionCheck += checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION")
+            if (permissionCheck != 0) {
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ), 1001
+                ) //Any number
+            }
+        } else {
+            Log.d(
+                TAG,
+                "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP."
+            )
+        }
+    }
+
+
+
+
+
 }
+
