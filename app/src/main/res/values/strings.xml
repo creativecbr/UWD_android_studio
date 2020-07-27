@@ -23,4 +23,6 @@
     <string name="keepConnections">połączony</string>
     <string name="problemWithDiscoverability">Wystąpił problem z widocznością urządzenia</string>
     <string name="refreshAgain">odśwież ponownie</string>
+    <string name="letsPlay">graj</string>
+    <string name="beDiscoverable">bądź widoczny</string>
 </resources>

@@ -9,16 +9,19 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 
-class JoinToRoom : AppCompatActivity() {
+class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
 
     var TAG:String="JoinToRoom"
     private var DISCOVERABLE_DURATION = 0
@@ -38,13 +41,25 @@ class JoinToRoom : AppCompatActivity() {
         this.scanButton = findViewById(R.id.scanButton)
         this.lvDevicesList = findViewById(R.id.foundDevicesList)
         this.connectStatus = findViewById(R.id.connectStatus)
-        this.nextButton = findViewById(R.id.nextButton)
+        this.nextButton = findViewById(R.id.refreshListButton)
+        lvDevicesList.onItemClickListener = this
+
+      // to remove
+        connectStatus.text = bAdapter.address
+
+
+        val statusBondedFilter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
+        registerReceiver(statusBondedBReceiver, statusBondedFilter)
 
         this.nextButton.setOnClickListener{
-
+            val intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+            intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, DISCOVERABLE_DURATION)
+            startActivityForResult(intent, REQUEST_CODE_ENABLE_DISCOVERABILTY)
         }
 
         this.scanButton.setOnClickListener{
+
+            btDevices.clear()
 
             if(this.bAdapter.isDiscovering)
             {
@@ -85,12 +100,32 @@ class JoinToRoom : AppCompatActivity() {
                 val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                 if (device != null) {
 
-                    if(!btDevices.contains(device))
-                    {
-                        btDevices.add(device)
-                        val mDeviceListAdapter = DeviceListAdapter(ctx!!, R.layout.device_adapter_view, this@JoinToRoom.btDevices)
-                        lvDevicesList.adapter = mDeviceListAdapter
-                    }
+                     btDevices.add(device)
+                     val mDeviceListAdapter = DeviceListAdapter(ctx!!, R.layout.device_adapter_view, this@JoinToRoom.btDevices)
+                     lvDevicesList.adapter = mDeviceListAdapter
+
+                }
+            }
+        }
+    }
+
+    private val statusBondedBReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val action = intent.action
+            if (action == BluetoothDevice.ACTION_BOND_STATE_CHANGED) {
+                val mDevice =
+                    intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+//case1:        // bonded already
+                if (mDevice!!.bondState == BluetoothDevice.BOND_BONDED) {
+                    connectStatus.text = "polaczono"
+                }
+                // creating a bone
+                if (mDevice!!.bondState == BluetoothDevice.BOND_BONDING) {
+                    connectStatus.text = "łączenie"
+                }
+                // breaking a bond
+                if (mDevice!!.bondState == BluetoothDevice.BOND_NONE) {
+                    connectStatus.text = "brak połączenia"
                 }
             }
         }
@@ -118,8 +153,17 @@ class JoinToRoom : AppCompatActivity() {
         }
     }
 
+    override fun onItemClick(p0: AdapterView<*>?, p1: View?, i: Int, l: Long) {
 
+        bAdapter.cancelDiscovery()
 
+        var dN = btDevices[i].name
+        var dA = btDevices[i].alias
+        var dAd = btDevices[i].address
+
+        btDevices[i].createBond()
+
+    }
 
 
 }

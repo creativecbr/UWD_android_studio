@@ -11,12 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_server_waiting_for_players.*
 import java.util.*
@@ -44,10 +39,13 @@ class ServerWaitingForPlayers : AppCompatActivity()
     lateinit var refreshButton: Button
     lateinit var nextButton: Button
     lateinit var backButton: Button
+    lateinit var refreshListButton: Button
+    lateinit var discoverableButton: Button
+    lateinit var connectedInfo: TextView
     lateinit var devicesArray: ArrayList<BluetoothDevice>
     lateinit var pairedList: ListView
     lateinit var bAdapter: BluetoothAdapter
-    lateinit var strings: ArrayList<String>
+    var strings = ArrayList<String>()
     lateinit var adapter: ArrayAdapter<String>
 
 
@@ -58,18 +56,35 @@ class ServerWaitingForPlayers : AppCompatActivity()
         findAllViews()
         showRoomNameAndPlayerLimit()
         limitPlayersAmount(6)
-        connectListToSockets()
+        registerReceivers()
         discoverabilityButtonService()
-       /*
 
-        refreshButton.setOnClickListener{
-            var tmp = getBoundedDevices()
-            for (device in tmp)
-                if(!strings.contains(device))
-                    strings.add(device)
+        refreshListButton.setOnClickListener{
 
-            adapter.notifyDataSetChanged()
-        }*/
+            var bt : Set<BluetoothDevice> = bAdapter.bondedDevices
+
+            if(bt.isNotEmpty())
+            {
+                for(device in bt)
+                {
+                    strings.add(device.name)
+                }
+            }
+            val arAp = ArrayAdapter(
+                this,
+                android.R.layout.simple_list_item_1,
+                strings
+            )
+            pairedList.adapter = arAp
+        }
+
+    }
+
+    private fun registerReceivers() {
+
+        val statusBondedFilter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
+        registerReceiver(statusBondedBReceiver, statusBondedFilter)
+
     }
 
     private val scanModeReceiver = object: BroadcastReceiver() {
@@ -83,18 +98,18 @@ class ServerWaitingForPlayers : AppCompatActivity()
 
                 if(modeValue == BluetoothAdapter.SCAN_MODE_CONNECTABLE)
                 {
-                    refreshButton.text = resources.getString(R.string.refreshAgain)
-                    refreshButton.isEnabled = true
+                    discoverableButton.text = resources.getString(R.string.refreshAgain)
+                    discoverableButton.isEnabled = true
                 }
                 else if(modeValue == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE)
                 {
-                    refreshButton.text =  resources.getString(R.string.discoverableNow)
-                    refreshButton.isEnabled = false
+                    discoverableButton.text =  resources.getString(R.string.discoverableNow)
+                    discoverableButton.isEnabled = false
                 }
                 else if(modeValue == BluetoothAdapter.SCAN_MODE_NONE)
                 {
-                    refreshButton.text  = resources.getString(R.string.refreshButton)
-                    refreshButton.isEnabled = true
+                    discoverableButton.text  = resources.getString(R.string.refreshButton)
+                    discoverableButton.isEnabled = true
                 }
                 else
                 {
@@ -105,9 +120,31 @@ class ServerWaitingForPlayers : AppCompatActivity()
 
     }
 
+    private val statusBondedBReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val action = intent.action
+            if (action == BluetoothDevice.ACTION_BOND_STATE_CHANGED) {
+                val mDevice =
+                    intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                // bonded already
+                if (mDevice!!.bondState == BluetoothDevice.BOND_BONDED) {
+                    connectedInfo.text = "polaczono"
+                }
+                // creating a bone
+                if (mDevice!!.bondState == BluetoothDevice.BOND_BONDING) {
+                    connectedInfo.text = "łączenie"
+                }
+                // breaking a bond
+                if (mDevice!!.bondState == BluetoothDevice.BOND_NONE) {
+                    connectedInfo.text = "brak połączenia"
+                }
+            }
+        }
+    }
     private fun discoverabilityButtonService() {
 
-        refreshButton.setOnClickListener{
+        discoverableButton.setOnClickListener{
+
 
             val intent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
             intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, DISCOVERABLE_DURATION)
@@ -115,6 +152,8 @@ class ServerWaitingForPlayers : AppCompatActivity()
 
             val intentFilter = IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED)
             registerReceiver(scanModeReceiver, intentFilter)
+
+
 
         }
     }
@@ -133,17 +172,6 @@ class ServerWaitingForPlayers : AppCompatActivity()
     }
 
 
-    private fun connectListToSockets() {
-       val test = arrayOf("xd", "ten", "iphone")
-       adapter = ArrayAdapter<String>(
-            this,
-            android.R.layout.simple_list_item_1,
-            test // change to strings!!!!!!
-        )
-
-        pairedList.adapter = adapter
-    }
-
     private fun limitPlayersAmount(limit: Int) {
         PLAYER_LIMIT = limit
     }
@@ -151,9 +179,12 @@ class ServerWaitingForPlayers : AppCompatActivity()
 
     private fun findAllViews() {
         bAdapter = BluetoothAdapter.getDefaultAdapter()
-        nextButton = findViewById<Button>(R.id.nextButton)
-        refreshButton = findViewById<Button>(R.id.refreshButton)
+        nextButton = findViewById<Button>(R.id.refreshListButton)
+        refreshButton = findViewById<Button>(R.id.discoverableButton)
         pairedList = findViewById<ListView>(R.id.pairedDevicesList)
+        connectedInfo = findViewById<TextView>(R.id.connectedInfo)
+        discoverableButton = findViewById<Button>(R.id.discoverableButton)
+        refreshListButton = findViewById<Button>(R.id.refreshListButton)
     }
 
 

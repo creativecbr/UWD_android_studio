@@ -7,6 +7,22 @@
     android:background="@drawable/background"
     tools:context=".ServerWaitingForPlayers">
 
+    <Button
+        android:id="@+id/nextButton2"
+        android:layout_width="204dp"
+        android:layout_height="42dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/shadow"
+        android:fontFamily="@font/major_regular"
+        android:text="@string/letsPlay"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/refreshListButton"
+        app:layout_constraintVertical_bias="1.0" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
@@ -60,45 +76,45 @@
     </ListView>
 
     <Button
-        android:id="@+id/refreshButton"
+        android:id="@+id/discoverableButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/buttonHeight"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="84dp"
+        android:background="@drawable/shadow"
+        android:fontFamily="@font/major_regular"
+        android:text="@string/beDiscoverable"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/refreshListButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/backButton" />
+
+    <Button
+        android:id="@+id/refreshListButton"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_marginBottom="84dp"
         android:background="@drawable/shadow"
         android:fontFamily="@font/major_regular"
         android:text="@string/refreshButton"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/nextButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/backButton" />
+        app:layout_constraintStart_toEndOf="@+id/discoverableButton" />
 
     <Button
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="84dp"
         android:background="@drawable/shadow"
         android:fontFamily="@font/major_regular"
         android:text="@string/backButton"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/refreshButton"
+        app:layout_constraintEnd_toStartOf="@+id/discoverableButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/nextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/buttonHeight"
-        android:layout_marginBottom="28dp"
-        android:background="@drawable/shadow"
-        android:fontFamily="@font/major_regular"
-        android:text="@string/nextButton"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/refreshButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

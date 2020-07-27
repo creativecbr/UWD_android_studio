@@ -1,16 +1,12 @@
 package lesniewski.pawel.uwd_android_studio
 
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE
 import android.bluetooth.BluetoothAdapter.getDefaultAdapter
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_create_room.*
 
@@ -33,7 +29,7 @@ class CreateRoom : AppCompatActivity(), IFragmentChanger {
       }
 
       //send input button service
-      btn = findViewById<View>(R.id.nextButton) as Button
+      btn = findViewById<View>(R.id.refreshListButton) as Button
       btn.setOnClickListener{
           bluetoothRequestIfDisabled()
 
