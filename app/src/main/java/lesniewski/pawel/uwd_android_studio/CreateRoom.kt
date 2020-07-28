@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_create_room.*
+import java.util.*
 
 class CreateRoom : AppCompatActivity(), IFragmentChanger {
 
@@ -36,24 +37,24 @@ class CreateRoom : AppCompatActivity(), IFragmentChanger {
       }
 
   }
-  fun goToServerWaitingActivity()
+  private fun goToServerWaitingActivity()
   {
       val roomName =  getInputRoomName()
 
-      bAdapter.name = roomName
+      bAdapter.name = "[UWD]$roomName"
       val intent = Intent(this, ServerWaitingForPlayers::class.java)
       intent.putExtra("roomName", roomName)
       startActivity(intent)
   }
 
-    fun getInputRoomName(): String {
+    private fun getInputRoomName(): String {
         val tmp = inputRoomName.text.toString()
         if(tmp!="")
             return tmp
         else
             return "room_997"
     }
-  fun bluetoothRequestIfDisabled()
+  private fun bluetoothRequestIfDisabled()
   {
       if(!bAdapter.isEnabled)
       {

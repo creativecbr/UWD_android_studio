@@ -1,18 +1,26 @@
 package lesniewski.pawel.uwd_android_studio
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import lesniewski.pawel.uwd_android_studio.services.BluetoothNameService
+
 
 class MainActivity : AppCompatActivity(), IFragmentChanger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ChangeFragment(supportFragmentManager, R.id.fragmentMenu, GameMainMenu())
+        StartBluetoothNameService()
 
     }
 
+    private fun StartBluetoothNameService() {
+        val intent = Intent(this, BluetoothNameService::class.java)
+        startService(intent)
+    }
 
 
 }

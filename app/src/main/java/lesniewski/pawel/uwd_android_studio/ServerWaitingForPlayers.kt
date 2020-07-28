@@ -2,6 +2,7 @@ package lesniewski.pawel.uwd_android_studio
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.PendingIntent.getActivity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothServerSocket
@@ -14,6 +15,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_server_waiting_for_players.*
+import java.io.InputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -22,7 +24,7 @@ class ServerWaitingForPlayers : AppCompatActivity()
 {
     private var TAG = "akcja!"
     private var ROOM_NAME = "---"
-    private var PLAYER_LIMIT = 6
+    private var PLAYER_LIMIT = 1
     private val APP_UUID = UUID.fromString("3b4c7719-3738-4234-94a3-22d72dbb8a74")
     private val REQUEST_CODE_ENABLE_BT: Int = 1
     private val REQUEST_CODE_ENABLE_DISCOVERABILTY: Int = 2
@@ -55,27 +57,28 @@ class ServerWaitingForPlayers : AppCompatActivity()
 
         findAllViews()
         showRoomNameAndPlayerLimit()
-        limitPlayersAmount(6)
+        limitPlayersAmount(1)
         registerReceivers()
         discoverabilityButtonService()
+        startClientSocketListening()
+
+
 
         refreshListButton.setOnClickListener{
-
+/*
             val bt : Set<BluetoothDevice> = bAdapter.bondedDevices
-
+            strings.clear()
             if(bt.isNotEmpty())
             {
                 for(device in bt)
                 {
                     strings.add(device.name)
                 }
-            }
-            val arAp = ArrayAdapter(
-                this,
-                android.R.layout.simple_list_item_1,
-                strings
-            )
-            pairedList.adapter = arAp
+            }*/
+
+            strings.add("chujostwo")
+            adapter.notifyDataSetChanged()
+
         }
 
     }
@@ -186,6 +189,9 @@ class ServerWaitingForPlayers : AppCompatActivity()
         connectedInfo = findViewById<TextView>(R.id.connectedInfo)
         discoverableButton = findViewById<Button>(R.id.discoverableButton)
         refreshListButton = findViewById<Button>(R.id.refreshListButton)
+
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, strings)
+        pairedList.adapter = adapter
     }
 
 
@@ -203,8 +209,33 @@ class ServerWaitingForPlayers : AppCompatActivity()
         maxPlayersInfo.text= resources.getString(R.string.maxPlayersInfo) + PLAYER_LIMIT.toString()
     }
 
-    inner class CollectingPlayers(var serverSocket: BluetoothServerSocket): Thread()
+    override fun onDestroy() {
+
+        super.onDestroy()
+        unregisterReceiver(scanModeReceiver)
+        unregisterReceiver(statusBondedBReceiver)
+        bAdapter.cancelDiscovery();
+    }
+
+    private fun startClientSocketListening() {
+
+        var listener = CollectingPlayers()
+        listener.start()
+
+
+        runOnUiThread(Runnable { // This code will always run on the UI thread, therefore is safe to modify UI elements.
+            //tutaj wrzucić collecting players
+        })
+
+    }
+
+
+
+    inner class CollectingPlayers() : Thread()
     {
+
+        private lateinit var serverSocket : BluetoothServerSocket
+
         init{
             try{
                 serverSocket = bAdapter.listenUsingRfcommWithServiceRecord(ROOM_NAME, APP_UUID)
@@ -223,21 +254,52 @@ class ServerWaitingForPlayers : AppCompatActivity()
 
             while(limit>0)
             {
-                val tmpSocket:BluetoothSocket = serverSocket.accept()
-                sockets.add(tmpSocket)
-                connectedInfo.text = resources.getString(R.string.connectedPlayersInfo) + cnt.toString()
-
-
-                //getting data from client on tmpSocket
-                //add received data to string list and notify
-
-                cnt++
-                limit--
+                try
+                {
+                    val tmpSocket:BluetoothSocket = serverSocket.accept()
+                    if(tmpSocket != null)
+                    {
+                        ReceiveNameOfDevice(tmpSocket)
+                        sockets.add(tmpSocket)
+                        cnt++
+                        limit--
+                        this@ServerWaitingForPlayers.connectedInfo.text = resources.getString(R.string.connectedPlayersInfo) + cnt.toString()
+                    }
+                }
+                catch (e: java.lang.Exception)
+                {
+                    println("Cant accept any connection")
+                }
             }
 
+            //GameServerMechanics(sockets)
+
         }
+    }
 
+    private fun ReceiveNameOfDevice(socket: BluetoothSocket)
+    {
+        var tempIn : InputStream
+        val buffer = ByteArray(1024)
+        var bytes: Int = 0
 
+        try{
+            tempIn =  socket.inputStream
+
+            while (bytes == 0)
+            {
+                try {
+                    bytes = tempIn.read(buffer)
+                    strings.add(buffer.toString())
+                    this@ServerWaitingForPlayers.adapter.notifyDataSetChanged()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        catch (e: Exception){
+            println(e.message)
+        }
 
     }
 }

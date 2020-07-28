@@ -5,11 +5,11 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +19,9 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import java.io.OutputStream
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
@@ -26,6 +29,7 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
     var TAG:String="JoinToRoom"
     private var DISCOVERABLE_DURATION = 0
     private var REQUEST_CODE_ENABLE_DISCOVERABILTY = 2
+    private val APP_UUID = UUID.fromString("3b4c7719-3738-4234-94a3-22d72dbb8a74")
     lateinit var scanButton: Button
     lateinit var nextButton: Button
     lateinit var lvDevicesList: ListView
@@ -59,7 +63,10 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         this.scanButton.setOnClickListener{
 
+
             btDevices.clear()
+            val mDeviceListAdapter = DeviceListAdapter(this,R.layout.device_adapter_view, this@JoinToRoom.btDevices)
+            lvDevicesList.adapter = mDeviceListAdapter
 
             if(this.bAdapter.isDiscovering)
             {
@@ -83,30 +90,34 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
     }
 
     override fun onDestroy() {
-
-        super.onDestroy()
         unregisterReceiver(scanReceiver)
+        unregisterReceiver(statusBondedBReceiver)
         bAdapter.cancelDiscovery();
+        super.onDestroy()
     }
 
     private val scanReceiver = object: BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
         override fun onReceive(ctx: Context?, intent: Intent?) {
             val action: String? = intent?.action
-            connectStatus.text = "mam"
             if(BluetoothDevice.ACTION_FOUND == action)
             {
 
                 val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                if (device != null) {
-
-                    if(!btDevices.contains((device))){
-
-                        btDevices.add(device)
-                        val mDeviceListAdapter = DeviceListAdapter(ctx!!, R.layout.device_adapter_view, this@JoinToRoom.btDevices)
-                        lvDevicesList.adapter = mDeviceListAdapter
+                if (device != null )
+                {
+                    if (!btDevices.contains((device)))
+                    {
+                        if (device.name != null)
+                        {
+                            if (device.name.contains("[UWD]"))
+                            {
+                                btDevices.add(device)
+                                val mDeviceListAdapter = DeviceListAdapter(ctx!!,R.layout.device_adapter_view,this@JoinToRoom.btDevices)
+                                lvDevicesList.adapter = mDeviceListAdapter
+                            }
+                        }
                     }
-
                 }
             }
         }
@@ -161,11 +172,46 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         bAdapter.cancelDiscovery()
 
+
        // var dN = btDevices[i].name
        // var dA = btDevices[i].alias
        // var dAd = btDevices[i].address
 
         btDevices[i].createBond()
+        sendNameToGameServerSocket(btDevices[i])
+
+    }
+
+    private fun sendNameToGameServerSocket(device: BluetoothDevice) {
+
+        var socket: BluetoothSocket? =  null
+        var connected = false
+        var tempOut: OutputStream? = null
+        try {
+            socket = device.createRfcommSocketToServiceRecord(APP_UUID)
+            socket.connect()
+
+            connected = true
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        var buffer = ByteArray(1024)
+        buffer = """${bAdapter.name} - nazwa""".toByteArray()
+
+        if(connected)
+        {
+            try {
+
+                tempOut = socket?.outputStream
+                tempOut?.write(buffer)
+            }
+            catch(e: Exception)
+            {
+                println("nie wyslano")
+            }
+        }
+
 
     }
 

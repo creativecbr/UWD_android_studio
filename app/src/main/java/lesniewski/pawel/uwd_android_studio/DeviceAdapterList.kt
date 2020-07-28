@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DeviceListAdapter(
     context: Context,
@@ -33,7 +35,8 @@ class DeviceListAdapter(
         val deviceName = cv?.findViewById<View>(R.id.tvDeviceName) as TextView
         val deviceAddress = cv.findViewById<View>(R.id.tvDeviceAddress) as TextView
 
-        deviceName.text = device.name
+        // cutting [UWD] from name and upper case
+        deviceName.text = device.name.substring(5, device.name.length).toUpperCase(Locale.ROOT)
         deviceAddress.text = device.address
 
         return cv
