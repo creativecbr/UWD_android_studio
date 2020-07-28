@@ -61,7 +61,7 @@ class ServerWaitingForPlayers : AppCompatActivity()
 
         refreshListButton.setOnClickListener{
 
-            var bt : Set<BluetoothDevice> = bAdapter.bondedDevices
+            val bt : Set<BluetoothDevice> = bAdapter.bondedDevices
 
             if(bt.isNotEmpty())
             {
@@ -121,6 +121,7 @@ class ServerWaitingForPlayers : AppCompatActivity()
     }
 
     private val statusBondedBReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @SuppressLint("SetTextI18n")
         override fun onReceive(context: Context, intent: Intent) {
             val action = intent.action
             if (action == BluetoothDevice.ACTION_BOND_STATE_CHANGED) {
@@ -131,11 +132,11 @@ class ServerWaitingForPlayers : AppCompatActivity()
                     connectedInfo.text = "polaczono"
                 }
                 // creating a bone
-                if (mDevice!!.bondState == BluetoothDevice.BOND_BONDING) {
+                if (mDevice.bondState == BluetoothDevice.BOND_BONDING) {
                     connectedInfo.text = "łączenie"
                 }
                 // breaking a bond
-                if (mDevice!!.bondState == BluetoothDevice.BOND_NONE) {
+                if (mDevice.bondState == BluetoothDevice.BOND_NONE) {
                     connectedInfo.text = "brak połączenia"
                 }
             }

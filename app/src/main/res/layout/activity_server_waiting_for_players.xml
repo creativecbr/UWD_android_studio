@@ -7,10 +7,31 @@
     android:background="@drawable/background"
     tools:context=".ServerWaitingForPlayers">
 
+    <ImageView
+        android:id="@+id/logo4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="25dp"
+        android:contentDescription="@string/logo"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.40218878" />
+
     <Button
-        android:id="@+id/nextButton2"
-        android:layout_width="204dp"
-        android:layout_height="42dp"
+        android:id="@+id/startPlayButton"
+        android:layout_width="200dp"
+        android:layout_height="@dimen/buttonHeight"
         android:layout_marginBottom="24dp"
         android:background="@drawable/shadow"
         android:fontFamily="@font/major_regular"
@@ -23,24 +44,18 @@
         app:layout_constraintTop_toBottomOf="@+id/refreshListButton"
         app:layout_constraintVertical_bias="1.0" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="297dp" />
-
     <TextView
         android:id="@+id/showRoomName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
         android:fontFamily="@font/major_regular"
         android:text="@string/exampleRoomName"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        app:layout_constraintTop_toBottomOf="@+id/logo4" />
 
     <TextView
         android:id="@+id/maxPlayersInfo"
@@ -106,7 +121,7 @@
     <Button
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/buttonHeight"
         android:layout_marginBottom="84dp"
         android:background="@drawable/shadow"
         android:fontFamily="@font/major_regular"

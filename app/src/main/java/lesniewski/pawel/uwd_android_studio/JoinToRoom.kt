@@ -100,9 +100,12 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
                 val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                 if (device != null) {
 
-                     btDevices.add(device)
-                     val mDeviceListAdapter = DeviceListAdapter(ctx!!, R.layout.device_adapter_view, this@JoinToRoom.btDevices)
-                     lvDevicesList.adapter = mDeviceListAdapter
+                    if(!btDevices.contains((device))){
+
+                        btDevices.add(device)
+                        val mDeviceListAdapter = DeviceListAdapter(ctx!!, R.layout.device_adapter_view, this@JoinToRoom.btDevices)
+                        lvDevicesList.adapter = mDeviceListAdapter
+                    }
 
                 }
             }
@@ -110,21 +113,22 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
     }
 
     private val statusBondedBReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @SuppressLint("SetTextI18n")
         override fun onReceive(context: Context, intent: Intent) {
             val action = intent.action
             if (action == BluetoothDevice.ACTION_BOND_STATE_CHANGED) {
                 val mDevice =
                     intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-//case1:        // bonded already
+                // bonded already
                 if (mDevice!!.bondState == BluetoothDevice.BOND_BONDED) {
                     connectStatus.text = "polaczono"
                 }
                 // creating a bone
-                if (mDevice!!.bondState == BluetoothDevice.BOND_BONDING) {
+                if (mDevice.bondState == BluetoothDevice.BOND_BONDING) {
                     connectStatus.text = "łączenie"
                 }
                 // breaking a bond
-                if (mDevice!!.bondState == BluetoothDevice.BOND_NONE) {
+                if (mDevice.bondState == BluetoothDevice.BOND_NONE) {
                     connectStatus.text = "brak połączenia"
                 }
             }
@@ -157,9 +161,9 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         bAdapter.cancelDiscovery()
 
-        var dN = btDevices[i].name
-        var dA = btDevices[i].alias
-        var dAd = btDevices[i].address
+       // var dN = btDevices[i].name
+       // var dA = btDevices[i].alias
+       // var dAd = btDevices[i].address
 
         btDevices[i].createBond()
 

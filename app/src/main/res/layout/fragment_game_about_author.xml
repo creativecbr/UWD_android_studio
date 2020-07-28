@@ -9,12 +9,13 @@
 
     <TextView
         android:id="@+id/aboutAuthorTextView"
-        android:layout_width="360dp"
-        android:layout_height="167dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:text="@string/lorem"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rightBorder"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="@+id/leftBorder"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -22,11 +23,24 @@
         android:layout_width="@dimen/buttonWidth"
         android:layout_height="@dimen/buttonHeight"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/backButton"
-        android:fontFamily="@font/major_regular"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:background="@drawable/shadow"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:fontFamily="@font/major_regular"
+        android:text="@string/backButton"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintEnd_toStartOf="@+id/rightBorder"
         app:layout_constraintTop_toBottomOf="@+id/aboutAuthorTextView" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftBorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="30dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightBorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="30dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,7 +12,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="35dp"
         android:fontFamily="@font/major_regular"
         android:text="@string/putRoomName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,6 +22,7 @@
 
     <EditText
         android:id="@+id/inputRoomName"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -33,7 +34,8 @@
         android:text="@string/exampleRoomName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:ignore="LabelFor" />
 
     <Button
         android:id="@+id/refreshListButton"
@@ -69,15 +71,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3392613" />
+        app:layout_constraintGuide_percent="0.40218878" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="30dp"
+        android:layout_marginEnd="25dp"
         android:contentDescription="@string/logo"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />

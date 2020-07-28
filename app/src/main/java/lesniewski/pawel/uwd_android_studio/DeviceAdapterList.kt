@@ -27,14 +27,14 @@ class DeviceListAdapter(
         convertView: View?,
         parent: ViewGroup
     ): View {
-        var cv: View? = mLayoutInflater.inflate(mViewResourceId, null)
+        val cv: View? = mLayoutInflater.inflate(mViewResourceId, null)
 
         val device = devices[position]
         val deviceName = cv?.findViewById<View>(R.id.tvDeviceName) as TextView
-        val deviceAdress = cv.findViewById<View>(R.id.tvDeviceAddress) as TextView
+        val deviceAddress = cv.findViewById<View>(R.id.tvDeviceAddress) as TextView
 
         deviceName.text = device.name
-        deviceAdress.text = device.address
+        deviceAddress.text = device.address
 
         return cv
     }

@@ -7,31 +7,49 @@
     android:background="@drawable/background"
     tools:context=".ServerWaitingForPlayers">
 
+    <ImageView
+        android:id="@+id/logo2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="25dp"
+        android:contentDescription="@string/logo"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
+
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
+        android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="297dp" />
+        app:layout_constraintGuide_percent="0.40218878" />
+
 
     <TextView
         android:id="@+id/seachRoomBaner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
         android:fontFamily="@font/major_regular"
         android:text="@string/chooseAvailableRoomBaner"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        app:layout_constraintTop_toBottomOf="@+id/logo2" />
 
     <ListView
         android:id="@+id/foundDevicesList"
         style="@style/Widget.AppCompat.ListView.Menu"
         android:layout_width="192dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
         android:fontFamily="@font/major_regular"
+        app:layout_constraintBottom_toTopOf="@+id/scanButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +61,7 @@
         android:id="@+id/scanButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/buttonHeight"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/shadow"
         android:fontFamily="@font/major_regular"
         android:text="@string/scanButton"
@@ -55,9 +73,9 @@
 
     <Button
         android:id="@+id/backButton"
-        android:layout_width="92dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/shadow"
         android:fontFamily="@font/major_regular"
         android:text="@string/backButton"
@@ -71,7 +89,7 @@
         android:id="@+id/refreshListButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/buttonHeight"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/shadow"
         android:fontFamily="@font/major_regular"
         android:text="@string/nextButton"
