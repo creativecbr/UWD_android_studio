@@ -48,9 +48,6 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
         this.nextButton = findViewById(R.id.refreshListButton)
         lvDevicesList.onItemClickListener = this
 
-      // to remove
-        connectStatus.text = bAdapter.address
-
 
         val statusBondedFilter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
         registerReceiver(statusBondedBReceiver, statusBondedFilter)
@@ -133,6 +130,7 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
                 // bonded already
                 if (mDevice!!.bondState == BluetoothDevice.BOND_BONDED) {
                     connectStatus.text = "polaczono"
+                    sendNameToGameServerSocket(mDevice)
                 }
                 // creating a bone
                 if (mDevice.bondState == BluetoothDevice.BOND_BONDING) {
@@ -186,7 +184,7 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         var socket: BluetoothSocket? =  null
         var connected = false
-        var tempOut: OutputStream? = null
+        var tempOut: OutputStream
         try {
             socket = device.createRfcommSocketToServiceRecord(APP_UUID)
             socket.connect()
@@ -196,14 +194,15 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        var buffer = ByteArray(1024)
-        buffer = """${bAdapter.name} - nazwa""".toByteArray()
+
+        var buffer = bAdapter.name.toByteArray()
+        Log.d(TAG, bAdapter.name)
 
         if(connected)
         {
             try {
 
-                tempOut = socket?.outputStream
+                tempOut = socket!!.outputStream
                 tempOut?.write(buffer)
             }
             catch(e: Exception)

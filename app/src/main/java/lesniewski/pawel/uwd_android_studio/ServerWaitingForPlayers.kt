@@ -2,7 +2,6 @@ package lesniewski.pawel.uwd_android_studio
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.PendingIntent.getActivity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothServerSocket
@@ -12,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_server_waiting_for_players.*
@@ -22,7 +22,7 @@ import kotlin.collections.ArrayList
 
 class ServerWaitingForPlayers : AppCompatActivity()
 {
-    private var TAG = "akcja!"
+    private var TAG = "Server Waiting for players -------- "
     private var ROOM_NAME = "---"
     private var PLAYER_LIMIT = 1
     private val APP_UUID = UUID.fromString("3b4c7719-3738-4234-94a3-22d72dbb8a74")
@@ -217,15 +217,11 @@ class ServerWaitingForPlayers : AppCompatActivity()
         bAdapter.cancelDiscovery();
     }
 
+    @SuppressLint("SetTextI18n")
     private fun startClientSocketListening() {
 
-        var listener = CollectingPlayers()
-        listener.start()
-
-
-        runOnUiThread(Runnable { // This code will always run on the UI thread, therefore is safe to modify UI elements.
-            //tutaj wrzucić collecting players
-        })
+        val clientCollector = CollectingPlayers()
+        clientCollector.start()
 
     }
 
@@ -234,7 +230,7 @@ class ServerWaitingForPlayers : AppCompatActivity()
     inner class CollectingPlayers() : Thread()
     {
 
-        private lateinit var serverSocket : BluetoothServerSocket
+        var serverSocket : BluetoothServerSocket? = null
 
         init{
             try{
@@ -246,6 +242,8 @@ class ServerWaitingForPlayers : AppCompatActivity()
             }
         }
 
+
+        @ExperimentalStdlibApi
         @SuppressLint("SetTextI18n")
         override fun run() {
             val sockets: ArrayList<BluetoothSocket> = ArrayList()
@@ -256,32 +254,36 @@ class ServerWaitingForPlayers : AppCompatActivity()
             {
                 try
                 {
-                    val tmpSocket:BluetoothSocket = serverSocket.accept()
-                    if(tmpSocket != null)
-                    {
-                        ReceiveNameOfDevice(tmpSocket)
-                        sockets.add(tmpSocket)
-                        cnt++
-                        limit--
+                    val tmpSocket:BluetoothSocket = serverSocket!!.accept()
+                    ReceiveNameOfDevice(tmpSocket)
+                    sockets.add(tmpSocket)
+                    cnt++
+                    limit--
+
+                    runOnUiThread(Runnable{
                         this@ServerWaitingForPlayers.connectedInfo.text = resources.getString(R.string.connectedPlayersInfo) + cnt.toString()
-                    }
+                    })
+
+
                 }
                 catch (e: java.lang.Exception)
                 {
-                    println("Cant accept any connection")
+                    Log.d(TAG, "Cant accept any connection")
                 }
             }
+
 
             //GameServerMechanics(sockets)
 
         }
     }
 
+    @ExperimentalStdlibApi
     private fun ReceiveNameOfDevice(socket: BluetoothSocket)
     {
-        var tempIn : InputStream
+        val tempIn : InputStream
         val buffer = ByteArray(1024)
-        var bytes: Int = 0
+        var bytes = 0
 
         try{
             tempIn =  socket.inputStream
@@ -290,15 +292,19 @@ class ServerWaitingForPlayers : AppCompatActivity()
             {
                 try {
                     bytes = tempIn.read(buffer)
-                    strings.add(buffer.toString())
-                    this@ServerWaitingForPlayers.adapter.notifyDataSetChanged()
+                    strings.add(buffer.decodeToString())
+
+                    runOnUiThread(Runnable {
+                        this@ServerWaitingForPlayers.adapter.notifyDataSetChanged()
+                    })
+
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.d(TAG, "Cant read data from buffer.")
                 }
             }
         }
         catch (e: Exception){
-            println(e.message)
+            Log.d(TAG, "Cant create input stream.")
         }
 
     }
