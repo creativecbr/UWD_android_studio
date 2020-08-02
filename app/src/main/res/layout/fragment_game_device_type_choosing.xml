@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameRoomChoosing">
+    tools:context=".GameDeviceTypeChoosing">
 
     <LinearLayout
         android:id="@+id/createRoomLayout"
         android:layout_width="145dp"
         android:layout_height="150dp"
-        android:background="@drawable/customborder"
+        android:background="@drawable/shadow_more_rounded"
         android:orientation="vertical"
         android:clickable="true"
         android:focusable="true"
@@ -61,7 +61,7 @@
         android:id="@+id/joinRoomLayout"
         android:layout_width="145dp"
         android:layout_height="150dp"
-        android:background="@drawable/customborder"
+        android:background="@drawable/shadow_more_rounded"
         android:orientation="vertical"
         android:clickable="true"
         android:focusable="true"

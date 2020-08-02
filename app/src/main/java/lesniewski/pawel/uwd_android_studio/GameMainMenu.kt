@@ -32,7 +32,7 @@ class GameMainMenu : Fragment(), IFragmentChanger {
 
         btn = v.findViewById<View>(R.id.button1) as Button
         btn.setOnClickListener{
-            ChangeFragment(activity!!.supportFragmentManager, R.id.fragmentMenu, GameRoomChoosing())
+            ChangeFragment(activity!!.supportFragmentManager, R.id.fragmentMenu, GameDeviceTypeChoosing())
         }
 
         return v

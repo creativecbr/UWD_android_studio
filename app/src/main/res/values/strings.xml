@@ -8,9 +8,22 @@
 
     <string name="backButton">wróć</string>
     <string name="nextButton">dalej</string>
+    <string name="scanButton">skanuj</string>
     <string name="createRoom">stwórz pokój</string>
     <string name="joinToRoom">dołącz do pokoju</string>
 
     <string name="putRoomName">Wpisz nazwę twojego pokoju:</string>
     <string name="exampleRoomName">room112</string>
+    <string name="refreshButton">odśwież</string>
+    <string name="maxPlayersInfo">Maksymalna ilość graczy: </string>
+    <string name="connectedPlayersInfo">Połączyło się: </string>
+    <string name="chooseAvailableRoomBaner">Wybierz dostępny pokój: </string>
+    <string name="discoverableNow">Widoczny</string>
+    <string name="connectStatusBar">"Status połączenia: "</string>
+    <string name="keepConnections">połączony</string>
+    <string name="problemWithDiscoverability">Wystąpił problem z widocznością urządzenia</string>
+    <string name="refreshAgain">odśwież ponownie</string>
+    <string name="letsPlay">graj</string>
+    <string name="beDiscoverable">bądź widoczny</string>
+    <string name="logo">Logo aplikacji</string>
 </resources>
