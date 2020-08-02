@@ -26,4 +26,6 @@
     <string name="letsPlay">graj</string>
     <string name="beDiscoverable">bądź widoczny</string>
     <string name="logo">Logo aplikacji</string>
+    <string name="done">gotowe</string>
+    <string name="questionCard">Karta pytania</string>
 </resources>

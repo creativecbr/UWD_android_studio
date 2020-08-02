@@ -18,8 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GameMechanics"></activity>
         <activity android:name=".JoinToRoom" />
+        <activity android:name=".GameClientMechanics" />
         <activity android:name=".ServerWaitingForPlayers" />
         <activity android:name=".CreateRoom" />
         <activity android:name=".MainActivity">
@@ -31,7 +31,7 @@
         </activity>
 
         <service
-            android:name=".BluetoothNameService"
+            android:name=".services.BluetoothNameService"
             android:enabled="true"
             android:exported="false"
             android:stopWithTask="true" />

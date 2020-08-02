@@ -1,6 +1,7 @@
 package lesniewski.pawel.uwd_android_studio
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +23,9 @@ class GameMainMenu : Fragment(), IFragmentChanger {
 
         var btn = v.findViewById<View>(R.id.button4) as Button
         btn.setOnClickListener{
-            ChangeFragment(activity!!.supportFragmentManager, R.id.fragmentMenu, GameAboutAuthor())
+            //ChangeFragment(activity!!.supportFragmentManager, R.id.fragmentMenu, GameAboutAuthor())
+            val intent = Intent(activity, GameClientMechanics::class.java)
+            startActivity(intent)
         }
 
         btn = v.findViewById<View>(R.id.button3) as Button
