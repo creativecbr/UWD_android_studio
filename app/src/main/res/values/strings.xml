@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Uceluj w dziesiątkę</string>
     <string name="friendsGame">Graj ze znajomymi</string>
     <string name="networkGame">Graj w sieci</string>
@@ -28,4 +28,8 @@
     <string name="logo">Logo aplikacji</string>
     <string name="done">gotowe</string>
     <string name="questionCard">Karta pytania</string>
+    <string name="welcomeInRoom" tools:ignore="TypographyEllipsis">Witaj w pokoju! oczekiwanie na reszte graczy...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="arrow">strzała</string>
 </resources>

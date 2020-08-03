@@ -1,17 +1,19 @@
-package lesniewski.pawel.uwd_android_studio
+package lesniewski.pawel.uwd_android_studio.fragmentsService
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_game_about_author.*
+import lesniewski.pawel.uwd_android_studio.GameMainMenu
+import lesniewski.pawel.uwd_android_studio.IFragmentChanger
+import lesniewski.pawel.uwd_android_studio.R
 
 
-class GameHowToPlay : Fragment(R.layout.fragment_game_how_to_play), IFragmentChanger
+class GameHowToPlay : Fragment(R.layout.fragment_game_how_to_play),
+    IFragmentChanger
 {
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,7 +24,10 @@ class GameHowToPlay : Fragment(R.layout.fragment_game_how_to_play), IFragmentCha
 
         val btn = v.findViewById<View>(R.id.backButton) as Button
         btn.setOnClickListener{
-            ChangeFragment(activity!!.supportFragmentManager, R.id.fragmentMenu, GameMainMenu())
+            ChangeFragment(activity!!.supportFragmentManager,
+                R.id.fragmentMenu,
+                GameMainMenu()
+            )
         }
 
 

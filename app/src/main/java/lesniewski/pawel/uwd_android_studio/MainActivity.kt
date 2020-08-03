@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity(), IFragmentChanger {
         setContentView(R.layout.activity_main)
         ChangeFragment(supportFragmentManager, R.id.fragmentMenu, GameMainMenu())
         StartBluetoothNameService()
+        //make it on top
 
     }
 

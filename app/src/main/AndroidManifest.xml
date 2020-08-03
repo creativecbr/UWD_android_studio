@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".JoinToRoom" />
-        <activity android:name=".GameClientMechanics" />
+        <activity android:name=".ClientMechanics" />
         <activity android:name=".ServerWaitingForPlayers" />
         <activity android:name=".CreateRoom" />
         <activity android:name=".MainActivity">
