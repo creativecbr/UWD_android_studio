@@ -43,7 +43,7 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
         setContentView(R.layout.activity_join_to_room)
 
         this.scanButton = findViewById(R.id.scanButton)
-        this.lvDevicesList = findViewById(R.id.foundDevicesList)
+        this.lvDevicesList = findViewById(R.id.approvingPlayersList)
         this.connectStatus = findViewById(R.id.connectStatus)
         this.nextButton = findViewById(R.id.refreshListButton)
         lvDevicesList.onItemClickListener = this
@@ -129,16 +129,17 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
                     intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                 // bonded already
                 if (mDevice!!.bondState == BluetoothDevice.BOND_BONDED) {
-                    connectStatus.text = "polaczono"
+                    connectStatus.text = resources.getString(R.string.connectStatusBar) + " połączono"
                     sendNameToGameServerSocket(mDevice)
+
                 }
                 // creating a bone
                 if (mDevice.bondState == BluetoothDevice.BOND_BONDING) {
-                    connectStatus.text = "łączenie"
+                    connectStatus.text = resources.getString(R.string.connectStatusBar) + " łączenie"
                 }
                 // breaking a bond
                 if (mDevice.bondState == BluetoothDevice.BOND_NONE) {
-                    connectStatus.text = "brak połączenia"
+                    connectStatus.text = resources.getString(R.string.connectStatusBar) + " brak połączenia"
                 }
             }
         }
@@ -169,12 +170,6 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
     override fun onItemClick(p0: AdapterView<*>?, p1: View?, i: Int, l: Long) {
 
         bAdapter.cancelDiscovery()
-
-
-       // var dN = btDevices[i].name
-       // var dA = btDevices[i].alias
-       // var dAd = btDevices[i].address
-
         btDevices[i].createBond()
         sendNameToGameServerSocket(btDevices[i])
 
@@ -184,7 +179,7 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         var socket: BluetoothSocket? =  null
         var connected = false
-        var tempOut: OutputStream
+        val tempOut: OutputStream
         try {
             socket = device.createRfcommSocketToServiceRecord(APP_UUID)
             socket.connect()
@@ -195,7 +190,7 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
             e.printStackTrace()
         }
 
-        var buffer = bAdapter.name.toByteArray()
+        val buffer = bAdapter.name.toByteArray()
         Log.d(TAG, bAdapter.name)
 
         if(connected)
@@ -209,6 +204,9 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener {
             {
                 println("nie wyslano")
             }
+            val inte = Intent(this@JoinToRoom, ClientBluetoothDataService::class.java)
+            inte.putExtra("server", device)
+            startActivity(inte)
         }
 
 

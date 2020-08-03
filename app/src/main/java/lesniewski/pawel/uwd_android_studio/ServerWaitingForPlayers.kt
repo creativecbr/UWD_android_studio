@@ -16,11 +16,12 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_server_waiting_for_players.*
 import java.io.InputStream
+import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ServerWaitingForPlayers : AppCompatActivity()
+class ServerWaitingForPlayers : AppCompatActivity(), Serializable
 {
     private var TAG = "Server Waiting for players -------- "
     private var ROOM_NAME = "---"
@@ -246,7 +247,7 @@ class ServerWaitingForPlayers : AppCompatActivity()
         @ExperimentalStdlibApi
         @SuppressLint("SetTextI18n")
         override fun run() {
-            val sockets: ArrayList<BluetoothSocket> = ArrayList()
+            val devices: ArrayList<String> = ArrayList()
             var limit = PLAYER_LIMIT
             var cnt = 0
 
@@ -255,8 +256,8 @@ class ServerWaitingForPlayers : AppCompatActivity()
                 try
                 {
                     val tmpSocket:BluetoothSocket = serverSocket!!.accept()
-                    ReceiveNameOfDevice(tmpSocket)
-                    sockets.add(tmpSocket)
+                    val tmpModel = ReceiveNameOfDevice(tmpSocket)
+                    devices.add(tmpModel)
                     cnt++
                     limit--
 
@@ -271,16 +272,20 @@ class ServerWaitingForPlayers : AppCompatActivity()
                     Log.d(TAG, "Cant accept any connection")
                 }
             }
-
-
-            //GameServerMechanics(sockets)
+            if(serverSocket != null)
+            {
+                serverSocket!!.close()
+                val intent = Intent(this@ServerWaitingForPlayers, ServerMechanics::class.java)
+                intent.putExtra("devices", devices)
+                intent.putExtra("amount", PLAYER_LIMIT.toString())
+                startActivity(intent)
+            }
 
         }
     }
 
     @ExperimentalStdlibApi
-    private fun ReceiveNameOfDevice(socket: BluetoothSocket)
-    {
+    private fun ReceiveNameOfDevice(socket: BluetoothSocket): String {
         val tempIn : InputStream
         val buffer = ByteArray(1024)
         var bytes = 0
@@ -306,6 +311,6 @@ class ServerWaitingForPlayers : AppCompatActivity()
         catch (e: Exception){
             Log.d(TAG, "Cant create input stream.")
         }
-
+        return buffer.decodeToString()
     }
 }

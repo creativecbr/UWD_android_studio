@@ -18,8 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ServerMechanics"></activity>
         <activity android:name=".JoinToRoom" />
-        <activity android:name=".ClientMechanics" />
+        <activity android:name=".ClientBluetoothDataService" />
         <activity android:name=".ServerWaitingForPlayers" />
         <activity android:name=".CreateRoom" />
         <activity android:name=".MainActivity">

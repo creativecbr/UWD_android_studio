@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import lesniewski.pawel.uwd_android_studio.fragmentsService.GameAboutAuthor
 import lesniewski.pawel.uwd_android_studio.fragmentsService.GameDeviceTypeChoosing
-import lesniewski.pawel.uwd_android_studio.fragmentsService.GameHowToPlay
 
 
 class GameMainMenu : Fragment(),
@@ -25,17 +25,17 @@ class GameMainMenu : Fragment(),
 
         var btn = v.findViewById<View>(R.id.button4) as Button
         btn.setOnClickListener{
-            //ChangeFragment(activity!!.supportFragmentManager, R.id.fragmentMenu, GameAboutAuthor())
-            val intent = Intent(activity, ClientMechanics::class.java)
-            startActivity(intent)
+            ChangeFragment(activity!!.supportFragmentManager, R.id.fragmentMenu, GameAboutAuthor())
         }
 
         btn = v.findViewById<View>(R.id.button3) as Button
         btn.setOnClickListener{
-            ChangeFragment(activity!!.supportFragmentManager,
+            /*ChangeFragment(activity!!.supportFragmentManager,
                 R.id.fragmentMenu,
                 GameHowToPlay()
-            )
+            )*/
+            val intent = Intent(activity, ClientBluetoothDataService::class.java)
+            startActivity(intent)
         }
 
         btn = v.findViewById<View>(R.id.button1) as Button
