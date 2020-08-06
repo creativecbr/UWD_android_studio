@@ -77,9 +77,6 @@ class ServerWaitingForPlayers : AppCompatActivity(), Serializable
                 }
             }*/
 
-            strings.add("chujostwo")
-            adapter.notifyDataSetChanged()
-
         }
 
     }
@@ -278,6 +275,7 @@ class ServerWaitingForPlayers : AppCompatActivity(), Serializable
                 val intent = Intent(this@ServerWaitingForPlayers, ServerMechanics::class.java)
                 intent.putExtra("devices", devices)
                 intent.putExtra("amount", PLAYER_LIMIT.toString())
+                intent.putExtra("roomName", ROOM_NAME)
                 startActivity(intent)
             }
 

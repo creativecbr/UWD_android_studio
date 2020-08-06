@@ -36,4 +36,6 @@
     <string name="round">runda</string>
     <string name="dartboard">tarcza</string>
     <string name="points">punkty:</string>
+    <string name="waitingForPlayers">oczekiwanie na graczy</string>
+    <string name="connected">połączono</string>
 </resources>
