@@ -5,5 +5,7 @@
     <color name="colorAccent">#FF00FB</color>
 
     <color name="mainColor">#36FF00</color>
+    <color name="red">#FF0000</color>
     <color name="borderLightColor">#28407C</color>
+    <color name="cardAnswerBackground">#727272</color>
 </resources>

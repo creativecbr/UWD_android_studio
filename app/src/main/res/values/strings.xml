@@ -38,4 +38,5 @@
     <string name="points">punkty:</string>
     <string name="waitingForPlayers">oczekiwanie na graczy</string>
     <string name="connected">połączono</string>
+    <string name="answerCard">odpowiedź na pytanie</string>
 </resources>

@@ -12,24 +12,24 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import lesniewski.pawel.uwd_android_studio.interfaces.IBluetoothConnectionManager
 import java.io.InputStream
 import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ServerMechanics() : AppCompatActivity(), Serializable {
+class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectionManager {
 
+    var serverSocket : BluetoothServerSocket? = null
     private var TAG = "Server Mechanics -------- "
     lateinit var ROOM_NAME: String
-    private val APP_UUID = UUID.fromString("3b4c7719-3738-4234-94a3-22d72dbb8a74")
     lateinit var bAdapter: BluetoothAdapter
     lateinit var devices: ArrayList<String>
-    var serverSocket : BluetoothServerSocket? = null
-    private lateinit var amount: String
+    lateinit var amount: String
     lateinit var pairedList: ListView
     lateinit var adapter: ArrayAdapter<String>
     lateinit var gameInfoBar: TextView
-    lateinit var clientsModel : ArrayList<ClientListenerModel>
+    //lateinit var clientsModel : ArrayList<ClientListenerModel>
     //TODO
     //Class ClientListenerModel
     //init with socket, every clientmodel has write to write to him, and listening on other thread
@@ -48,30 +48,10 @@ class ServerMechanics() : AppCompatActivity(), Serializable {
     @SuppressLint("SetTextI18n")
     private fun waitingForPlayers()    {
         gameInfoBar.text = resources.getString(R.string.gameStatus) + resources.getString(R.string.waitingForPlayers)
+        serverSocket = getServerSocket(ROOM_NAME)
 
+        Thread(Runnable{
 
-        try
-        {
-            serverSocket = bAdapter.listenUsingRfcommWithServiceRecord(ROOM_NAME, APP_UUID)
-        }
-        catch (e: Exception)
-        {
-           Log.d(TAG, "Server socket listening set error.")
-        }
-
-        if(serverSocket!=null)
-        {
-
-        }
-
-    }
-
-    inner class CollectiongPlayers() : Thread()
-    {
-        @ExperimentalStdlibApi
-        @SuppressLint("SetTextI18n")
-        override fun run() {
-            val devices: ArrayList<BluetoothDevice> = ArrayList()
             var limit = amount.toInt()
             var cnt = 0
 
@@ -80,7 +60,7 @@ class ServerMechanics() : AppCompatActivity(), Serializable {
                 try
                 {
                     val tmpSocket: BluetoothSocket = serverSocket!!.accept()
-                    clientsModel.add(ClientListenerModel(tmpSocket))
+                    //clientsModel.add(ClientListenerModel(tmpSocket))
                     cnt++
                     limit--
 
@@ -98,8 +78,8 @@ class ServerMechanics() : AppCompatActivity(), Serializable {
             {
                 serverSocket!!.close()
             }
+        })
 
-        }
     }
 
 

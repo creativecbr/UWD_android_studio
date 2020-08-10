@@ -7,12 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import lesniewski.pawel.uwd_android_studio.GameMainMenu
-import lesniewski.pawel.uwd_android_studio.IFragmentChanger
 import lesniewski.pawel.uwd_android_studio.R
+import lesniewski.pawel.uwd_android_studio.interfaces.IFragmentChanger
 
 
-class GameAboutAuthor : Fragment(R.layout.fragment_game_about_author),
+class AboutAuthor : Fragment(R.layout.fragment_about_author),
     IFragmentChanger
 {
     override fun onCreateView(
@@ -20,13 +19,13 @@ class GameAboutAuthor : Fragment(R.layout.fragment_game_about_author),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View?{
-        val v = inflater.inflate(R.layout.fragment_game_about_author, container, false)
+        val v = inflater.inflate(R.layout.fragment_about_author, container, false)
 
         val btn = v.findViewById<View>(R.id.backButton) as Button
         btn.setOnClickListener{
             ChangeFragment(activity!!.supportFragmentManager,
                 R.id.fragmentMenu,
-                GameMainMenu()
+                MainMenu()
             )
         }
 

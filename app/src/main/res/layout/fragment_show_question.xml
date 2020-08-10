@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/card_background"
-    tools:context=".fragmentsService.GameShowQuestion">
+    tools:context=".fragmentsService.ShowQuestion">
 
     <TextView
         android:id="@+id/questionTv"
-        android:layout_width="190dp"
-        android:layout_height="231dp"
+        android:layout_width="168dp"
+        android:layout_height="236dp"
         android:layout_below="@+id/arrow"
         android:layout_marginTop="5dp"
         android:text="@string/questionCard"

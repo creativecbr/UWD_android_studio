@@ -1,4 +1,4 @@
-package lesniewski.pawel.uwd_android_studio
+package lesniewski.pawel.uwd_android_studio.fragmentsService
 
 
 import android.content.Intent
@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import lesniewski.pawel.uwd_android_studio.fragmentsService.GameAboutAuthor
-import lesniewski.pawel.uwd_android_studio.fragmentsService.GameDeviceTypeChoosing
+import lesniewski.pawel.uwd_android_studio.ClientMechanics
+import lesniewski.pawel.uwd_android_studio.R
+import lesniewski.pawel.uwd_android_studio.interfaces.IFragmentChanger
 
-
-class GameMainMenu : Fragment(),
+//starting class with menu options included in fragment
+class MainMenu : Fragment(),
     IFragmentChanger {
 
 
@@ -21,11 +22,13 @@ class GameMainMenu : Fragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View?{
-        val v = inflater.inflate(R.layout.fragment_game_main_menu, container, false)
+
+        val v = inflater.inflate(R.layout.fragment_main_menu, container, false)
 
         var btn = v.findViewById<View>(R.id.button4) as Button
         btn.setOnClickListener{
-            ChangeFragment(activity!!.supportFragmentManager, R.id.fragmentMenu, GameAboutAuthor())
+            ChangeFragment(activity!!.supportFragmentManager,
+                R.id.fragmentMenu, AboutAuthor())
         }
 
         btn = v.findViewById<View>(R.id.button3) as Button
@@ -34,7 +37,7 @@ class GameMainMenu : Fragment(),
                 R.id.fragmentMenu,
                 GameHowToPlay()
             )*/
-            val intent = Intent(activity, ClientBluetoothDataService::class.java)
+            val intent = Intent(activity, ClientMechanics::class.java)
             startActivity(intent)
         }
 
@@ -42,7 +45,7 @@ class GameMainMenu : Fragment(),
         btn.setOnClickListener{
             ChangeFragment(activity!!.supportFragmentManager,
                 R.id.fragmentMenu,
-                GameDeviceTypeChoosing()
+                SelectDeviceType()
             )
         }
 
