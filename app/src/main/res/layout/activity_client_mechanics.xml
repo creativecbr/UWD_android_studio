@@ -29,6 +29,8 @@
         android:layout_marginBottom="12dp"
         android:clipToPadding="false"
         android:foregroundGravity="center"
+        android:gravity="center"
+        android:layout_gravity="center"
         android:overScrollMode="never"
         app:layout_constraintBottom_toTopOf="@+id/readyBtn"
         app:layout_constraintEnd_toEndOf="parent"

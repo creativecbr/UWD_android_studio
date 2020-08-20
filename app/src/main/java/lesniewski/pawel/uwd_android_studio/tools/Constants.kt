@@ -11,10 +11,13 @@ object Constants {
     const val REQUEST_CODE_ENABLE_BT: Int = 1
     const val REQUEST_CODE_ENABLE_DISCOVERABILTY: Int = 2
     const val DISCOVERABLE_DURATION = 120 // in seconds
+    const val AMOUNT_OF_ANSWERS_ON_START = 5
 
     const val STATE_LISTENING = 1
     const val STATE_CONNECTING = 2
     const val STATE_CONNECTED = 3
     const val STATE_CONNECTION_FAILED = 4
     const val STATE_MESSAGE_RECEIVED = 5
+
+    const val NOT_STARTED = 0
 }
