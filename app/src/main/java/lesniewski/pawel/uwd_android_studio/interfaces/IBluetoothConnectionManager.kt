@@ -12,6 +12,7 @@ import android.content.res.Resources
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import lesniewski.pawel.uwd_android_studio.ClientListenerModel
 import lesniewski.pawel.uwd_android_studio.ClientMechanics
 import lesniewski.pawel.uwd_android_studio.R
 import lesniewski.pawel.uwd_android_studio.tools.Constants
@@ -25,6 +26,8 @@ interface IBluetoothConnectionManager {
         return try {
             val btSocket = device.createRfcommSocketToServiceRecord(APP_UUID)
             btSocket.connect()
+            //tu blad read failed, socket might closed or timeout, read ret: -1
+            //wrzucic na serwerze znow tworzenie socketa i gra
             btSocket
 
         } catch (e: Exception) {
@@ -52,11 +55,11 @@ interface IBluetoothConnectionManager {
 
     fun sendStringToGameServerSocket(socket: BluetoothSocket, name: String) : Boolean {
 
-           val tempOut: OutputStream
+
 
         return try {
             val buffer = name.toByteArray()
-            tempOut = socket.outputStream
+            var tempOut = socket.outputStream
             tempOut?.write(buffer)!!
             true
         } catch(e: Exception) {
@@ -82,7 +85,7 @@ interface IBluetoothConnectionManager {
                     bytes = tempIn.read(buffer)
 
                 } catch (e: Exception) {
-                    Log.d(TAG_, "Cant read data from buffer.")
+                    Log.d(TAG_, "Cant read data from buffer - $e")
                 }
             }
         }
@@ -93,6 +96,7 @@ interface IBluetoothConnectionManager {
         return buffer.decodeToString()
 
     }
+
 
     class StatusBondedReceiver(val connectedInfo: TextView): BroadcastReceiver() {
         @SuppressLint("SetTextI18n")

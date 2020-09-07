@@ -89,7 +89,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvResult" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/questionPool"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="25dp"

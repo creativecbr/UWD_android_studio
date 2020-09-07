@@ -28,7 +28,7 @@
     <string name="logo">Logo aplikacji</string>
     <string name="done">gotowe</string>
     <string name="questionCard">Karta pytania żebyś tutaj coś wpasowała …</string>
-    <string name="welcomeInRoom" tools:ignore="TypographyEllipsis">Witaj w pokoju! oczekiwanie na reszte graczy...</string>
+    <string name="welcomeInRoom" tools:ignore="TypographyEllipsis">Witaj w pokoju! oczekiwanie na reszte graczy... Pamiętaj aby zatwierdzić swoją obecność.</string>
     <string name="arrow">strzała</string>
     <string name="gameStatus">status gry:</string>
     <string name="randomQuestion">wylosowane pytanie</string>
@@ -39,4 +39,5 @@
     <string name="waitingForPlayers">oczekiwanie na graczy</string>
     <string name="connected">połączono</string>
     <string name="answerCard">odpowiedź na pytanie</string>
+    <string name="confirmAttendance">potwierdź obecność</string>
 </resources>

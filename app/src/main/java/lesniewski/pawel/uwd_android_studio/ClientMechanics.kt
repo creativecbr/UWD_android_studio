@@ -11,6 +11,8 @@ import lesniewski.pawel.uwd_android_studio.fragmentsService.ShowQuestion
 import lesniewski.pawel.uwd_android_studio.interfaces.IBluetoothConnectionManager
 import lesniewski.pawel.uwd_android_studio.interfaces.IFragmentChanger
 import lesniewski.pawel.uwd_android_studio.models.CardModel
+import lesniewski.pawel.uwd_android_studio.tools.Constants.NOT_STARTED
+import lesniewski.pawel.uwd_android_studio.tools.Constants.READY_WAITING_FOR_QUESTIONS
 import java.io.Serializable
 
 
@@ -19,6 +21,8 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
 
     lateinit var readyBtn: Button
     lateinit var btSocket: BluetoothSocket
+
+    var gameState: Int = NOT_STARTED
     var btDevice: BluetoothDevice? = null
     lateinit var viewPager: ViewPager
     lateinit var cardAdapter: CardModelAdapter
@@ -28,11 +32,22 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_client_mechanics)
         findHandlers()
-        connectToServer()
+
 
         readyBtn.setOnClickListener{
+
+            when(gameState)
+            {
+                NOT_STARTED ->
+                {
+                    cntToServer()
+                    gameState = READY_WAITING_FOR_QUESTIONS
+                    readyBtn.isClickable = false
+                }
+            }
             ChangeFragment( supportFragmentManager, R.id.fragmentClientMechanics, ShowQuestion())
 
             cardModels.add(CardModel("abecadło"))
@@ -64,11 +79,13 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
     }
     */
 
-    private fun connectToServer() {
+    private fun cntToServer() {
         if(btDevice != null)
         {
             btSocket = connectToServer(btDevice!!)!!
+            //tutaj jest coś nie tak, btdevice jakby null
         }
+
     }
 
 

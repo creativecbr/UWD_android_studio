@@ -219,13 +219,18 @@ class ServerWaitingForPlayers : AppCompatActivity(), Serializable, IBluetoothCon
                 try
                 {
                     val tmpSocket:BluetoothSocket = serverSocket!!.accept()
+
+                    if(tmpSocket.isConnected)
+                    {
+                        Log.d(TAG,"Niby polaczono")
+                    }
                     cnt++
                     limit--
                     val tmpModel = receiveStringFromSocket(tmpSocket)
                     devices.add(tmpModel!!)
 
                     runOnUiThread(Runnable{
-                        this@ServerWaitingForPlayers.connectedInfo.text = resources.getString(R.string.connectedPlayersInfo) + cnt.toString()
+                        this@ServerWaitingForPlayers.connectedInfo.text = resources.getString(R.string.connectedPlayersInfo) + tmpModel//cnt.toString()
                     })
 
 
@@ -236,15 +241,15 @@ class ServerWaitingForPlayers : AppCompatActivity(), Serializable, IBluetoothCon
                 }
             }
             if(serverSocket != null)
-            {
-                serverSocket.close()
+            {   //TODO
+                //check this out, issue with socket server in server mechanics
+                //serverSocket.close()
                 val intent = Intent(this@ServerWaitingForPlayers, ServerMechanics::class.java)
-                intent.putExtra("devices", devices)
                 intent.putExtra("amount", PLAYER_LIMIT.toString())
                 intent.putExtra("roomName", ROOM_NAME)
                 startActivity(intent)
             }
 
-        })
+        }).start()
     }
 }

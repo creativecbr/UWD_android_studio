@@ -5,6 +5,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothDevice.BOND_NONE
 import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -186,21 +187,25 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener, IBlueto
     override fun onItemClick(p0: AdapterView<*>?, p1: View?, i: Int, l: Long) {
 
         bAdapter.cancelDiscovery()
-        btDevices[i].createBond()
-        sendNameToServer(btDevices[i])
+        if(btDevices[i].bondState == BOND_NONE)
+            btDevices[i].createBond()
+        else
+            sendNameToServer(btDevices[i])
 
     }
 
     private fun sendNameToServer(device: BluetoothDevice) {
 
         val socket = connectToServer(device)
-        if(socket != null)
+        if(socket != null && socket.isConnected)
         {
             if(sendStringToGameServerSocket(socket, bAdapter.name))
             {
                 val inte = Intent(this@JoinToRoom, ClientMechanics::class.java)
                 inte.putExtra("server", device)
+                //socket.close()
                 startActivity(inte)
+
             }
         }
     }

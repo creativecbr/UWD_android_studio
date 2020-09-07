@@ -29,11 +29,11 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
     lateinit var bAdapter: BluetoothAdapter
     lateinit var devices: ArrayList<String>
     lateinit var amount: String
-    lateinit var pairedList: ListView
     lateinit var adapter: ArrayAdapter<String>
     lateinit var gameInfoBar: TextView
     lateinit var readyBtn: Button
     lateinit var clientsModel : ArrayList<ClientListenerModel>
+    lateinit var questionPool: TextView
 
     var questions = arrayListOf("Co zabiło Michela Jacksona?", "Gdzie ma Putin Demokrację?", "Co nie zmieści się w ustach Sashy Gray?")
     var answers = arrayListOf("Popek Monster", "Heisenberg", "Nic", "Ojciec Mateusz", "Szczątki Tupolewa", "Srający kot", "Ale ale aleksandra", "Zdjęcie Tatiany Okupnik", "Jądro ziemi ale też moje", "Ozzy Osborn","Odpowiedź 1","Odpowiedź 2","Odpowiedź 3","Odpowiedź 4","Odpowiedź 5","Odpowiedź 6","Odpowiedź 7","Odpowiedź 8","Odpowiedź 9","Odpowiedź 10","Odpowiedź 11" )
@@ -45,14 +45,24 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
     //based on SendReceive
 
 
+    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_server_mechanics)
         getDevicesAndViews()
         setListAdapter()
         waitingForPlayers()
+        startListeningPlayers()
         implementListeners()
 
+    }
+
+    @ExperimentalStdlibApi
+    private fun startListeningPlayers() {
+       for( client in clientsModel)
+            {
+                client.run()
+            }
     }
 
     private fun implementListeners() {
@@ -97,8 +107,6 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
 
     var handler: Handler = Handler(Handler.Callback { msg ->
         when (msg.what) {
-
-
             STATE_MESSAGE_RECEIVED -> {
                 val readBuff = msg.obj as ByteArray
                 val tempMsg = String(msg.obj as ByteArray, 0, msg.arg1)
@@ -108,10 +116,13 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
         true
     })
 
+    @ExperimentalStdlibApi
     @SuppressLint("SetTextI18n")
     private fun waitingForPlayers()    {
         gameInfoBar.text = resources.getString(R.string.gameStatus) + resources.getString(R.string.waitingForPlayers)
-        serverSocket = getServerSocket(ROOM_NAME)
+        questionPool.text = "Proszę czekać.."
+        this.serverSocket = getServerSocket(ROOM_NAME)
+        // here should be serverSocket, need to check it
 
         Thread(Runnable{
 
@@ -122,7 +133,7 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
             {
                 try
                 {
-                    val tmpSocket: BluetoothSocket = serverSocket!!.accept()
+                    val tmpSocket: BluetoothSocket = this.serverSocket!!.accept()
                     clientsModel.add(ClientListenerModel(tmpSocket, handler))
                     cnt++
                     limit--
@@ -137,10 +148,7 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
                     Log.d(TAG, "Cant accept any connection")
                 }
             }
-            if(serverSocket != null)
-            {
-                serverSocket!!.close()
-            }
+
             runOnUiThread(Runnable{
                 this@ServerMechanics.readyBtn.isEnabled = true
             })
@@ -153,17 +161,17 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
 
         bAdapter = BluetoothAdapter.getDefaultAdapter()
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, devices)
-        pairedList.adapter = adapter
+
     }
 
     private fun getDevicesAndViews() {
-        pairedList = findViewById<ListView>(R.id.approvingPlayersList)
+
         gameInfoBar = findViewById<TextView>(R.id.gameInfoBar)
         readyBtn = findViewById<Button>(R.id.readyBtn)
+        questionPool = findViewById<TextView>(R.id.questionPool)
 
         val int: Intent = intent
         amount = int.getStringExtra("amount")!!
-        devices = int.getSerializableExtra("devices") as ArrayList<String>
         ROOM_NAME = int.getStringExtra("roomName")!!
     }
 }
