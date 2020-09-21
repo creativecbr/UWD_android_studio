@@ -9,11 +9,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_create_room.*
+import lesniewski.pawel.uwd_android_studio.interfaces.IFragmentChanger
+import lesniewski.pawel.uwd_android_studio.tools.Constants.REQUEST_CODE_ENABLE_BT
 import java.util.*
 
 class CreateRoom : AppCompatActivity(), IFragmentChanger {
 
-    private val REQUEST_CODE_ENABLE_BT: Int = 1
+
     private var bluetoothOn = false
     lateinit var bAdapter:BluetoothAdapter
 

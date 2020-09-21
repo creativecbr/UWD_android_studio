@@ -1,8 +1,7 @@
-Feature-4 last merged
+Feature-5:
 
-Feature 2: Main menu service
-Feature 3: Bluetooth game server service 
-Feature 4: Implements client connection and display simple communicate.
+Client and server design, without backend, by adobe XD
+Storage data for game cards keep in file, in future will roll out to noSql database.
 
 Leśniewski Paweł
 Uceluj w dziesiątkę 2020

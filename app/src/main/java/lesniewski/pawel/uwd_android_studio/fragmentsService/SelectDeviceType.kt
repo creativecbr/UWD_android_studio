@@ -1,9 +1,8 @@
-package lesniewski.pawel.uwd_android_studio
+package lesniewski.pawel.uwd_android_studio.fragmentsService
 
 
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,13 +12,14 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import lesniewski.pawel.uwd_android_studio.*
+import lesniewski.pawel.uwd_android_studio.interfaces.IFragmentChanger
+import lesniewski.pawel.uwd_android_studio.tools.Constants.REQUEST_CODE_ENABLE_BT
 
 
-class GameDeviceTypeChoosing : Fragment(), IFragmentChanger {
+class SelectDeviceType : Fragment(),
+    IFragmentChanger {
 
-    private val REQUEST_CODE_ENABLE_BT: Int = 1
-    private val DISCOVERABLE_DURATION: Int = 0
-    private val REQUEST_CODE_ENABLE_DISCOVERABILTY: Int = 2
     lateinit var bAdapter:BluetoothAdapter
 
     override fun onCreateView(
@@ -27,11 +27,14 @@ class GameDeviceTypeChoosing : Fragment(), IFragmentChanger {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View?{
-        val v = inflater.inflate(R.layout.fragment_game_device_type_choosing, container, false)
+        val v = inflater.inflate(R.layout.fragment_device_type_choosing, container, false)
 
         val btn = v.findViewById<View>(R.id.backButton) as Button
         btn.setOnClickListener{
-            ChangeFragment(activity!!.supportFragmentManager, R.id.fragmentMenu, GameMainMenu())
+            ChangeFragment(activity!!.supportFragmentManager,
+                R.id.fragmentMenu,
+                MainMenu()
+            )
         }
 
         val create_layer = v.findViewById(R.id.createRoomLayout) as LinearLayout

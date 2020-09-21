@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/logo2" />
 
     <ListView
-        android:id="@+id/foundDevicesList"
+        android:id="@+id/approvingPlayersList"
         style="@style/Widget.AppCompat.ListView.Menu"
         android:layout_width="192dp"
         android:layout_height="0dp"

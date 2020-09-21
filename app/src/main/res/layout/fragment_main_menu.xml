@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameMainMenu">
+    tools:context=".fragmentsService.MainMenu">
 
 
     <Button
         android:id="@+id/button1"
         style="@style/Widget.AppCompat.Button.Small"
-        android:layout_width="@dimen/buttonWidth"
+        android:minWidth="@dimen/buttonWidth"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/buttonHeight"
         android:background="@drawable/shadow"
         android:fontFamily="@font/major_regular"
@@ -25,7 +26,8 @@
     <Button
         android:id="@+id/button2"
         style="@android:style/Widget.Holo.Light.Button.Small"
-        android:layout_width="@dimen/buttonWidth"
+        android:minWidth="@dimen/buttonWidth"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/buttonHeight"
         android:layout_marginTop="@dimen/menuButtonsMargin"
         android:enabled="false"
@@ -39,7 +41,8 @@
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="@dimen/buttonWidth"
+        android:minWidth="@dimen/buttonWidth"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/buttonHeight"
         android:layout_marginTop="@dimen/menuButtonsMargin"
         android:fontFamily="@font/major_regular"
@@ -52,7 +55,8 @@
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="@dimen/buttonWidth"
+        android:minWidth="@dimen/buttonWidth"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/buttonHeight"
         android:layout_marginTop="@dimen/menuButtonsMargin"
         android:fontFamily="@font/major_regular"

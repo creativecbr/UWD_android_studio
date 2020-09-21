@@ -4,19 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameHowToPlay">
+    tools:context=".fragmentsService.AboutAuthor">
 
 
     <TextView
-        android:id="@+id/howToPlayText"
+        android:id="@+id/aboutAuthorTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:text="@string/lorem"
         app:layout_constraintEnd_toStartOf="@+id/rightBorder"
-        app:layout_constraintHorizontal_bias="0.313"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="@+id/leftBorder"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="@dimen/buttonWidth"
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/shadow"
+        android:fontFamily="@font/major_regular"
+        android:text="@string/backButton"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintEnd_toStartOf="@+id/rightBorder"
+        app:layout_constraintTop_toBottomOf="@+id/aboutAuthorTextView" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftBorder"
@@ -31,16 +43,4 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="30dp" />
-
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="@dimen/buttonWidth"
-        android:layout_height="@dimen/buttonHeight"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/shadow"
-        android:fontFamily="@font/major_regular"
-        android:text="@string/backButton"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        app:layout_constraintEnd_toStartOf="@+id/rightBorder"
-        app:layout_constraintTop_toBottomOf="@+id/howToPlayText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

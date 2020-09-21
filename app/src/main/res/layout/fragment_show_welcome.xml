@@ -2,17 +2,29 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameServerMechanics">
+    tools:context=".fragmentsService.ShowWelcome">
+    <!--
+        <ImageView
+            android:id="@+id/questionCard"
+            android:layout_width="match_parent"
+            android:layout_height="528dp"
+            android:contentDescription="@string/questionCard"/>
+            android:src="@drawable/questioncorrectversion_short" /> -->
 
     <TextView
-        android:id="@+id/receiveData"
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
+        android:text="@string/welcomeInRoom"
+        android:textSize="22sp"
+        android:fontFamily="@font/major_regular"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

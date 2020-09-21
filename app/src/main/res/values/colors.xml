@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#555555</color>
-    <color name="colorPrimaryDark">#BDBDBD</color>
-    <color name="colorAccent">#ECECEC</color>
+    <color name="colorPrimaryDark">#FF0000</color>
+    <color name="colorAccent">#FF00FB</color>
 
-    <color name="mainColor">#FFFFFF</color>
-    <color name="borderLightColor">#ECECEC</color>
+    <color name="mainColor">#36FF00</color>
+    <color name="red">#FF0000</color>
+    <color name="borderLightColor">#28407C</color>
+    <color name="cardAnswerBackground">#727272</color>
 </resources>
