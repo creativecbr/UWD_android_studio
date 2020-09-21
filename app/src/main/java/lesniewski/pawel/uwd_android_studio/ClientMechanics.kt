@@ -3,7 +3,6 @@ package lesniewski.pawel.uwd_android_studio
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
@@ -11,8 +10,12 @@ import lesniewski.pawel.uwd_android_studio.fragmentsService.ShowQuestion
 import lesniewski.pawel.uwd_android_studio.interfaces.IBluetoothConnectionManager
 import lesniewski.pawel.uwd_android_studio.interfaces.IFragmentChanger
 import lesniewski.pawel.uwd_android_studio.models.CardModel
+import lesniewski.pawel.uwd_android_studio.tools.Constants.CLIENT_CHOOSING_NOW
+import lesniewski.pawel.uwd_android_studio.tools.Constants.CLIENT_FIRST_ANSWERS_AND_QUESTION_RECEIVED
+
+import lesniewski.pawel.uwd_android_studio.tools.Constants.CLIENT_WAITING_FOR_QUESTION_AND_ANSWERS
+import lesniewski.pawel.uwd_android_studio.tools.Constants.END_GAME
 import lesniewski.pawel.uwd_android_studio.tools.Constants.NOT_STARTED
-import lesniewski.pawel.uwd_android_studio.tools.Constants.READY_WAITING_FOR_QUESTIONS
 import java.io.Serializable
 
 
@@ -22,14 +25,22 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
     lateinit var readyBtn: Button
     lateinit var btSocket: BluetoothSocket
 
+    private val lock = java.lang.Object()
+
     var gameState: Int = NOT_STARTED
     var btDevice: BluetoothDevice? = null
+    var messageFromServer = ""
     lateinit var viewPager: ViewPager
     lateinit var cardAdapter: CardModelAdapter
     var cardModels = ArrayList<CardModel>()
+    var currentQuestion = ""
+    var currentAnswers = arrayListOf<String>()
+
+    //TODO
+    //synchronizacja na gameState na wszelki wpyadek, lock
 
 
-
+    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,12 +55,17 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
                 NOT_STARTED ->
                 {
                     cntToServer()
-                    gameState = READY_WAITING_FOR_QUESTIONS
-                    readyBtn.isClickable = false
-                    readyBtn.isActivated = false
+                    startListeningFromServer()
+                    startGame()
+                    turnOffButton()
+                    setButton(resources.getString(R.string.waitForQuestionsAndAnswers))
+                    gameState = CLIENT_WAITING_FOR_QUESTION_AND_ANSWERS
+
                 }
             }
-            ChangeFragment( supportFragmentManager, R.id.fragmentClientMechanics, ShowQuestion())
+
+            /*
+            ChangeFragment(supportFragmentManager, R.id.fragmentClientMechanics, ShowQuestion())
 
             cardModels.add(CardModel("abecadło"))
             cardModels.add(CardModel("ciąża"))
@@ -63,9 +79,96 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
             //var pagerStack = ViewPagerStack()
             //viewPager.setPageTransformer(true, pagerStack)
             viewPager.setPadding(220,0,220,0)
-
+            */
         }
 
+    }
+
+    private fun startGame()
+    {
+        Thread(Runnable{
+
+            while (gameState != END_GAME)
+                when(gameState){
+                    CLIENT_FIRST_ANSWERS_AND_QUESTION_RECEIVED ->
+                    {
+                        decodeAnswersAndQuestion()
+                        showQuestion()
+                        showAnswers()
+                        gameState = CLIENT_CHOOSING_NOW
+
+                        setButton(resources.getString(R.string.chooseAnswer))
+                        turnOnButton()
+                    }
+                }
+        }).start()
+    }
+
+    private fun showAnswers() {
+
+        for(ans in currentAnswers)
+        {
+            cardModels.add(CardModel(ans))
+            cardAdapter = CardModelAdapter(cardModels, this)
+            viewPager.adapter = cardAdapter
+            viewPager.setPadding(220,0,220,0)
+        }
+    }
+
+    private fun showQuestion() {
+
+        var bun = Bundle()
+        bun.putString("que",currentQuestion)
+
+        val questionFragment = ShowQuestion()
+        questionFragment.arguments = bun
+
+        ChangeFragment( supportFragmentManager, R.id.fragmentClientMechanics, questionFragment)
+
+    }
+
+    private fun decodeAnswersAndQuestion()
+    {
+        val messageArray = messageFromServer.split(",").toTypedArray()
+        currentQuestion = messageArray[1]
+
+        for(i in 2..messageArray.size-2)
+        {
+            currentAnswers.add(messageArray[i])
+        }
+
+    }
+
+
+    @ExperimentalStdlibApi
+    private fun startListeningFromServer() {
+        var inputStream = btSocket.inputStream
+
+        Thread(Runnable {
+
+            val buffer = ByteArray(1024)
+            var bytes: Int
+            while (true)
+            {
+                try {
+                    if (inputStream != null)
+                    {
+                        bytes = inputStream.read(buffer)
+                        if(bytes!=0)
+                        {
+                            messageFromServer = buffer.decodeToString()
+
+                            if(messageFromServer.contains("FAAQ"))
+                                gameState = CLIENT_FIRST_ANSWERS_AND_QUESTION_RECEIVED
+                        }
+
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+        }).start()
     }
 /*
     private class ViewPagerStack : ViewPager.PageTransformer {
@@ -79,6 +182,20 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
         }
     }
     */
+    private fun setButton(str: String)
+    {
+        readyBtn.text = str
+    }
+    private fun turnOffButton()
+    {
+        readyBtn.isClickable = false
+        readyBtn.isActivated = false
+    }
+    private fun turnOnButton()
+    {
+        readyBtn.isClickable = true
+        readyBtn.isActivated = true
+    }
 
     private fun cntToServer() {
 

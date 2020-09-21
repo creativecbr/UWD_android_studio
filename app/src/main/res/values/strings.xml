@@ -42,4 +42,7 @@
     <string name="confirmAttendance">potwierdź obecność</string>
     <string name="askPlayersForApproval">poproś graczy o zatwierdzenie</string>
     <string name="startGame">zacznij grę</string>
+    <string name="chooseAnswer">wybierz</string>
+    <string name="waitForAnswers">poczekaj na odpowiedzi</string>
+    <string name="waitForQuestionsAndAnswers">czekaj na zestaw</string>
 </resources>

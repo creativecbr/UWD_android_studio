@@ -7,8 +7,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class ClientListenerModel(
-    var socket: BluetoothSocket,
-    handler: Handler
+    var socket: BluetoothSocket
 ): Thread() {
 
     private var TAG = "Client Listener Model"
@@ -16,6 +15,7 @@ class ClientListenerModel(
     var inputStream: InputStream? = null
     var buffer = ByteArray(1024)
     var bytes = 0
+    var answer = ""
 
 
     init{
@@ -31,11 +31,13 @@ class ClientListenerModel(
     @ExperimentalStdlibApi
     override fun run()
     {
+        answer = ""
         while(true)
         {
             try{
                 bytes = inputStream!!.read(buffer)
                 var tmp = buffer.decodeToString()
+                this.answer = tmp
 
            } catch(e: Exception)
             {
