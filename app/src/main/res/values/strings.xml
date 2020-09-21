@@ -16,7 +16,7 @@
     <string name="exampleRoomName">room112</string>
     <string name="refreshButton">odśwież</string>
     <string name="maxPlayersInfo">Maksymalna ilość graczy: </string>
-    <string name="connectedPlayersInfo">Połączyło się: </string>
+    <string name="connectedPlayersInfo">połączyło się: </string>
     <string name="chooseAvailableRoomBaner">Wybierz dostępny pokój: </string>
     <string name="discoverableNow">Widoczny</string>
     <string name="connectStatusBar">"Status połączenia: "</string>
@@ -28,7 +28,7 @@
     <string name="logo">Logo aplikacji</string>
     <string name="done">gotowe</string>
     <string name="questionCard">Karta pytania żebyś tutaj coś wpasowała …</string>
-    <string name="welcomeInRoom" tools:ignore="TypographyEllipsis">Witaj w pokoju! oczekiwanie na reszte graczy... Pamiętaj aby zatwierdzić swoją obecność.</string>
+    <string name="welcomeInRoom" tools:ignore="TypographyEllipsis">witaj w pokoju! oczekiwanie na reszte graczy... pamiętaj aby zatwierdzić swoją obecność.</string>
     <string name="arrow">strzała</string>
     <string name="gameStatus">status gry:</string>
     <string name="randomQuestion">wylosowane pytanie</string>
@@ -40,4 +40,6 @@
     <string name="connected">połączono</string>
     <string name="answerCard">odpowiedź na pytanie</string>
     <string name="confirmAttendance">potwierdź obecność</string>
+    <string name="askPlayersForApproval">poproś graczy o zatwierdzenie</string>
+    <string name="startGame">zacznij grę</string>
 </resources>

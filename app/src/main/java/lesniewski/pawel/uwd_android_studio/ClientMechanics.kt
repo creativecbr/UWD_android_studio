@@ -46,6 +46,7 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
                     cntToServer()
                     gameState = READY_WAITING_FOR_QUESTIONS
                     readyBtn.isClickable = false
+                    readyBtn.isActivated = false
                 }
             }
             ChangeFragment( supportFragmentManager, R.id.fragmentClientMechanics, ShowQuestion())
@@ -80,10 +81,10 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
     */
 
     private fun cntToServer() {
+
         if(btDevice != null)
         {
             btSocket = connectToServer(btDevice!!)!!
-            //tutaj jest coś nie tak, btdevice jakby null
         }
 
     }

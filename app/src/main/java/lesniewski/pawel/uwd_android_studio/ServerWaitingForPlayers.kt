@@ -238,12 +238,12 @@ class ServerWaitingForPlayers : AppCompatActivity(), Serializable, IBluetoothCon
                 catch (e: java.lang.Exception)
                 {
                     Log.d(TAG, "Cant accept any connection")
+                    break
                 }
             }
             if(serverSocket != null)
-            {   //TODO
-                //check this out, issue with socket server in server mechanics
-                //serverSocket.close()
+            {
+                serverSocket.close()
                 val intent = Intent(this@ServerWaitingForPlayers, ServerMechanics::class.java)
                 intent.putExtra("amount", PLAYER_LIMIT.toString())
                 intent.putExtra("roomName", ROOM_NAME)

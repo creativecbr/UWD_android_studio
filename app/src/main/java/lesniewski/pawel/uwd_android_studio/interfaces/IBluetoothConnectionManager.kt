@@ -55,11 +55,9 @@ interface IBluetoothConnectionManager {
 
     fun sendStringToGameServerSocket(socket: BluetoothSocket, name: String) : Boolean {
 
-
-
         return try {
             val buffer = name.toByteArray()
-            var tempOut = socket.outputStream
+            val tempOut = socket.outputStream
             tempOut?.write(buffer)!!
             true
         } catch(e: Exception) {

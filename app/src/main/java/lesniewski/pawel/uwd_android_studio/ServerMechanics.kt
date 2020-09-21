@@ -52,7 +52,7 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
         getDevicesAndViews()
         setListAdapter()
         waitingForPlayers()
-        startListeningPlayers()
+        //startListeningPlayers()
         implementListeners()
 
     }
@@ -82,7 +82,7 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
         var message = "ANSWERS:"
         for(client in clientsModel) {
             while (cnt > 0) {
-                var answerNumber = (0..answers.size).random()
+                val answerNumber = (0..answers.size).random()
                 message += answers[answerNumber] + ":"
                 answers.removeAt(answerNumber)
                 cnt--
@@ -95,7 +95,7 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
 
     private fun sendQuestion() {
 
-        var questionNumber = (0..questions.size).random()
+        val questionNumber = (0..questions.size).random()
 
         for(client in clientsModel)
         {
@@ -122,7 +122,6 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
         gameInfoBar.text = resources.getString(R.string.gameStatus) + resources.getString(R.string.waitingForPlayers)
         questionPool.text = "Proszę czekać.."
         this.serverSocket = getServerSocket(ROOM_NAME)
-        // here should be serverSocket, need to check it
 
         Thread(Runnable{
 
@@ -134,25 +133,29 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
                 try
                 {
                     val tmpSocket: BluetoothSocket = this.serverSocket!!.accept()
+
                     clientsModel.add(ClientListenerModel(tmpSocket, handler))
                     cnt++
                     limit--
 
                     runOnUiThread(Runnable{
-                        this@ServerMechanics.gameInfoBar.text = resources.getString(R.string.gameStatus) + resources.getString(R.string.connected) + cnt.toString() + " / " + amount
+                        this@ServerMechanics.gameInfoBar.text = resources.getString(R.string.gameStatus) + " " + resources.getString(R.string.connected) + " " + cnt.toString() + "/" + amount
+
                     })
 
                 }
                 catch (e: java.lang.Exception)
                 {
                     Log.d(TAG, "Cant accept any connection")
+                    break
                 }
             }
 
             runOnUiThread(Runnable{
                 this@ServerMechanics.readyBtn.isEnabled = true
+                this@ServerMechanics.readyBtn.text = resources.getString(R.string.startGame)
             })
-        })
+        }).start()
 
     }
 
@@ -160,7 +163,6 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
     private fun setListAdapter() {
 
         bAdapter = BluetoothAdapter.getDefaultAdapter()
-        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, devices)
 
     }
 
@@ -169,6 +171,7 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
         gameInfoBar = findViewById<TextView>(R.id.gameInfoBar)
         readyBtn = findViewById<Button>(R.id.readyBtn)
         questionPool = findViewById<TextView>(R.id.questionPool)
+        clientsModel = arrayListOf<ClientListenerModel>()
 
         val int: Intent = intent
         amount = int.getStringExtra("amount")!!

@@ -203,7 +203,7 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener, IBlueto
             {
                 val inte = Intent(this@JoinToRoom, ClientMechanics::class.java)
                 inte.putExtra("server", device)
-                //socket.close()
+                socket.close()
                 startActivity(inte)
 
             }
