@@ -1,7 +1,8 @@
-Feature-5:
+Feature-6:
 
-Client and server design, without backend, by adobe XD
-Storage data for game cards keep in file, in future will roll out to noSql database.
+Keeping connection between clients and server.
+Sending message between devices, game mechanics.
+
 
 Leśniewski Paweł
 Uceluj w dziesiątkę 2020
