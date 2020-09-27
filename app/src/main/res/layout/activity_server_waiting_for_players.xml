@@ -84,12 +84,12 @@
         android:text="@string/beDiscoverable"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/refreshListButton"
+        app:layout_constraintEnd_toStartOf="@+id/nextButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/backButton" />
 
     <Button
-        android:id="@+id/refreshListButton"
+        android:id="@+id/nextButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/buttonHeight"
         android:layout_marginBottom="30dp"

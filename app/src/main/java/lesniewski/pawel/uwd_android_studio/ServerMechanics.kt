@@ -8,16 +8,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_server_mechanics.*
 import lesniewski.pawel.uwd_android_studio.interfaces.IBluetoothConnectionManager
 import lesniewski.pawel.uwd_android_studio.models.CardModel
 import lesniewski.pawel.uwd_android_studio.tools.Constants.AMOUNT_OF_ANSWERS_ON_START
 import lesniewski.pawel.uwd_android_studio.tools.Constants.END_GAME
+import lesniewski.pawel.uwd_android_studio.tools.Constants.GAME_UUID
 import lesniewski.pawel.uwd_android_studio.tools.Constants.NOT_STARTED
 
 import lesniewski.pawel.uwd_android_studio.tools.Constants.SERVER_CHOOSING_ANSWER
@@ -59,11 +57,15 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_server_mechanics)
         getDevicesAndViews()
+        getServerSocketForGame()
         setListAdapter()
         waitingForPlayers()
-        startListeningPlayers()
         implementListeners()
 
+    }
+
+    private fun getServerSocketForGame() {
+        this.serverSocket = getServerSocket(ROOM_NAME, GAME_UUID)
     }
 
     @ExperimentalStdlibApi
@@ -187,7 +189,7 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
 
     private fun randQuestion() {
 
-        val questionNumber = (0..DBquestions.size).random()
+        val questionNumber = (0..DBquestions.size-1).random()
         currentQuestion = DBquestions[questionNumber]
         DBquestions.removeAt(questionNumber)
     }
@@ -206,11 +208,13 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
     @ExperimentalStdlibApi
     @SuppressLint("SetTextI18n")
     private fun waitingForPlayers()    {
+
         gameInfoBar.text = resources.getString(R.string.gameStatus) + resources.getString(R.string.waitingForPlayers)
         questionPool.text = "Proszę czekać.."
-        this.serverSocket = getServerSocket(ROOM_NAME)
+        Toast.makeText(this, "waiting", Toast.LENGTH_LONG).show()
 
         Thread(Runnable{
+
 
             var limit = amount.toInt()
             var cnt = 0
@@ -219,6 +223,9 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
             {
                 try
                 {
+                    runOnUiThread(Runnable{
+                        Toast.makeText(this, "Już można potwierdzać obecność!", Toast.LENGTH_LONG).show()
+                    })
                     val tmpSocket: BluetoothSocket = this.serverSocket!!.accept()
 
                     clientsModel.add(ClientListenerModel(tmpSocket))
@@ -242,6 +249,9 @@ class ServerMechanics() : AppCompatActivity(), Serializable, IBluetoothConnectio
                 this@ServerMechanics.readyBtn.isEnabled = true
                 this@ServerMechanics.readyBtn.text = resources.getString(R.string.startGame)
             })
+
+            startListeningPlayers()
+
         }).start()
 
     }

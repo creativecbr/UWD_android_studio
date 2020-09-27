@@ -16,16 +16,36 @@ import lesniewski.pawel.uwd_android_studio.ClientListenerModel
 import lesniewski.pawel.uwd_android_studio.ClientMechanics
 import lesniewski.pawel.uwd_android_studio.R
 import lesniewski.pawel.uwd_android_studio.tools.Constants
-import lesniewski.pawel.uwd_android_studio.tools.Constants.APP_UUID
+import lesniewski.pawel.uwd_android_studio.tools.Constants.ATTEMPS_CONNECTION_NUMBER
 import java.io.InputStream
 import java.io.OutputStream
+import java.util.*
 
 interface IBluetoothConnectionManager {
 
-    fun connectToServer(device: BluetoothDevice): BluetoothSocket? {
+
+
+    fun connectToServer(device: BluetoothDevice, uuid: UUID): BluetoothSocket? {
         return try {
-            val btSocket = device.createRfcommSocketToServiceRecord(APP_UUID)
-            btSocket.connect()
+            val btSocket = device.createRfcommSocketToServiceRecord(uuid)
+
+                var acn = ATTEMPS_CONNECTION_NUMBER
+                while(acn > 0)
+                {
+                    try
+                    {
+                    btSocket.connect()
+                    break
+                    }
+                    catch(e: java.lang.Exception)
+                    {
+                        Log.d(TAG_, "ERROR UNTIL CONNECTING")
+                    }
+                    acn--
+                }
+
+
+            //moze juz bez connect
             //tu blad read failed, socket might closed or timeout, read ret: -1
             //wrzucic na serwerze znow tworzenie socketa i gra
             btSocket
@@ -36,17 +56,17 @@ interface IBluetoothConnectionManager {
         }
     }
 
-    fun getServerSocket(roomName: String): BluetoothServerSocket? {
+    fun getServerSocket(roomName: String, uuid: UUID): BluetoothServerSocket? {
 
         var serverSocket : BluetoothServerSocket? = null
 
-        try{
-            serverSocket = BluetoothAdapter.getDefaultAdapter().listenUsingRfcommWithServiceRecord(roomName, APP_UUID)
-
+        try
+        {
+            serverSocket = BluetoothAdapter.getDefaultAdapter().listenUsingRfcommWithServiceRecord(roomName, uuid)
         }
         catch (e: Exception)
         {
-            println("Server socket listening set error.")
+            println("Server socket creating set error.")
         }
 
         return serverSocket

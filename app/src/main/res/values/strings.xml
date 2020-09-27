@@ -45,4 +45,5 @@
     <string name="chooseAnswer">wybierz</string>
     <string name="waitForAnswers">poczekaj na odpowiedzi</string>
     <string name="waitForQuestionsAndAnswers">czekaj na zestaw</string>
+    <string name="putPlayersLimit">wpisz ilość graczy:</string>
 </resources>

@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothDevice.BOND_NONE
-import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -21,10 +20,9 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import lesniewski.pawel.uwd_android_studio.interfaces.IBluetoothConnectionManager
+import lesniewski.pawel.uwd_android_studio.tools.Constants.CONNECT_UUID
 import lesniewski.pawel.uwd_android_studio.tools.Constants.DISCOVERABLE_DURATION
 import lesniewski.pawel.uwd_android_studio.tools.Constants.REQUEST_CODE_ENABLE_DISCOVERABILTY
-import java.io.OutputStream
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -88,7 +86,7 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener, IBlueto
         this.scanButton = findViewById(R.id.scanButton)
         this.lvDevicesList = findViewById(R.id.approvingPlayersList)
         this.connectStatus = findViewById(R.id.connectStatus)
-        this.nextButton = findViewById(R.id.refreshListButton)
+        this.nextButton = findViewById(R.id.nextButton)
         lvDevicesList.onItemClickListener = this
     }
 
@@ -196,14 +194,13 @@ class JoinToRoom : AppCompatActivity(), AdapterView.OnItemClickListener, IBlueto
 
     private fun sendNameToServer(device: BluetoothDevice) {
 
-        val socket = connectToServer(device)
-        if(socket != null && socket.isConnected)
+        val socket = connectToServer(device, CONNECT_UUID)
+        if(socket != null)
         {
             if(sendStringToGameServerSocket(socket, bAdapter.name))
             {
                 val inte = Intent(this@JoinToRoom, ClientMechanics::class.java)
                 inte.putExtra("server", device)
-                socket.close()
                 startActivity(inte)
 
             }

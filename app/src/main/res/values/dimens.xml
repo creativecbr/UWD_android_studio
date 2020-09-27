@@ -5,4 +5,5 @@
     <dimen name="buttonHeight">45dp</dimen>
     <dimen name="logoTopMargin">300dp</dimen>
     <dimen name="menuButtonsMargin">25dp</dimen>
+    <dimen name="numberInputWidth">40dp</dimen>
 </resources>

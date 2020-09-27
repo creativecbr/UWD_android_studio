@@ -13,8 +13,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_server_waiting_for_players.*
 import lesniewski.pawel.uwd_android_studio.interfaces.IBluetoothConnectionManager
+import lesniewski.pawel.uwd_android_studio.tools.Constants.CONNECT_UUID
 import lesniewski.pawel.uwd_android_studio.tools.Constants.DISCOVERABLE_DURATION
-import lesniewski.pawel.uwd_android_studio.tools.Constants.PLAYER_LIMIT
 import lesniewski.pawel.uwd_android_studio.tools.Constants.REQUEST_CODE_ENABLE_DISCOVERABILTY
 import java.io.Serializable
 import kotlin.collections.ArrayList
@@ -24,6 +24,7 @@ class ServerWaitingForPlayers : AppCompatActivity(), Serializable, IBluetoothCon
 {
     private var TAG = "Server Waiting for players -------- "
     var ROOM_NAME = ""
+    var PLAYER_LIMIT = 0
 
     lateinit var refreshButton: Button
     lateinit var nextButton: Button
@@ -169,12 +170,12 @@ class ServerWaitingForPlayers : AppCompatActivity(), Serializable, IBluetoothCon
 
     private fun findAllViews() {
         bAdapter = BluetoothAdapter.getDefaultAdapter()
-        nextButton = findViewById<Button>(R.id.refreshListButton)
+        nextButton = findViewById<Button>(R.id.nextButton)
         refreshButton = findViewById<Button>(R.id.discoverableButton)
         pairedList = findViewById<ListView>(R.id.pairedDevicesList)
         connectedInfo = findViewById<TextView>(R.id.connectedInfo)
         discoverableButton = findViewById<Button>(R.id.discoverableButton)
-        refreshListButton = findViewById<Button>(R.id.refreshListButton)
+        refreshListButton = findViewById<Button>(R.id.nextButton)
 
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, devices)
         pairedList.adapter = adapter
@@ -186,13 +187,21 @@ class ServerWaitingForPlayers : AppCompatActivity(), Serializable, IBluetoothCon
     {
         val extras = intent.extras
         var name = ""
+        var limit = 0
         if (extras != null) {
             name = extras.getString("roomName").toString()
-        }
-        ROOM_NAME = name
+            limit = extras.getString("playersLimit")!!.toInt()
 
-        showRoomName.text=name
-        maxPlayersInfo.text= resources.getString(R.string.maxPlayersInfo) + PLAYER_LIMIT.toString()
+            ROOM_NAME = name
+            PLAYER_LIMIT = limit
+
+            showRoomName.text = name
+            maxPlayersInfo.text =
+                resources.getString(R.string.maxPlayersInfo) + PLAYER_LIMIT.toString()
+        }
+        else{
+            Log.d(TAG, "Cant transfer extras with room name and limit.")
+        }
     }
 
     override fun onDestroy() {
@@ -207,49 +216,47 @@ class ServerWaitingForPlayers : AppCompatActivity(), Serializable, IBluetoothCon
     @SuppressLint("SetTextI18n")
     private fun clientsCollecting() {
 
-        val serverSocket = getServerSocket(ROOM_NAME)
+        val serverSocket = getServerSocket(ROOM_NAME, CONNECT_UUID)
 
         var limit = PLAYER_LIMIT
         var cnt = 0
 
-        Thread(Runnable {
+        if(serverSocket != null) {
 
-            while(limit>0)
-            {
-                try
-                {
-                    val tmpSocket:BluetoothSocket = serverSocket!!.accept()
+            Thread(Runnable {
 
-                    if(tmpSocket.isConnected)
-                    {
-                        Log.d(TAG,"Niby polaczono")
+                while (limit > 0) {
+                    try {
+                        val tmpSocket: BluetoothSocket = serverSocket.accept()
+
+                        if (tmpSocket.isConnected) {
+                            Log.d(TAG, "CONNECTED: found device number " + (cnt+1).toString())
+                        }
+                        cnt++
+                        limit--
+                        val tmpModel = receiveStringFromSocket(tmpSocket)
+                        devices.add(tmpModel!!)
+
+                        runOnUiThread(Runnable {
+                            this@ServerWaitingForPlayers.connectedInfo.text =
+                                resources.getString(R.string.connectedPlayersInfo) + tmpModel//cnt.toString()
+                        })
+
+
+                    } catch (e: java.lang.Exception) {
+                        Log.d(TAG, "Cant accept any connection")
+                        break
                     }
-                    cnt++
-                    limit--
-                    val tmpModel = receiveStringFromSocket(tmpSocket)
-                    devices.add(tmpModel!!)
-
-                    runOnUiThread(Runnable{
-                        this@ServerWaitingForPlayers.connectedInfo.text = resources.getString(R.string.connectedPlayersInfo) + tmpModel//cnt.toString()
-                    })
-
-
                 }
-                catch (e: java.lang.Exception)
-                {
-                    Log.d(TAG, "Cant accept any connection")
-                    break
-                }
-            }
-            if(serverSocket != null)
-            {
-                serverSocket.close()
-                val intent = Intent(this@ServerWaitingForPlayers, ServerMechanics::class.java)
-                intent.putExtra("amount", PLAYER_LIMIT.toString())
-                intent.putExtra("roomName", ROOM_NAME)
-                startActivity(intent)
-            }
 
-        }).start()
+                 serverSocket.close() //v.f.5
+                 val intent = Intent(this@ServerWaitingForPlayers, ServerMechanics::class.java)
+                 intent.putExtra("amount", PLAYER_LIMIT.toString())
+                 intent.putExtra("roomName", ROOM_NAME)
+                 startActivity(intent)
+
+
+            }).start()
+        }
     }
 }

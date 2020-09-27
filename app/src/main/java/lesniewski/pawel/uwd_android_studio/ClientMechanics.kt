@@ -3,6 +3,8 @@ package lesniewski.pawel.uwd_android_studio
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.Spanned
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
@@ -12,9 +14,9 @@ import lesniewski.pawel.uwd_android_studio.interfaces.IFragmentChanger
 import lesniewski.pawel.uwd_android_studio.models.CardModel
 import lesniewski.pawel.uwd_android_studio.tools.Constants.CLIENT_CHOOSING_NOW
 import lesniewski.pawel.uwd_android_studio.tools.Constants.CLIENT_FIRST_ANSWERS_AND_QUESTION_RECEIVED
-
 import lesniewski.pawel.uwd_android_studio.tools.Constants.CLIENT_WAITING_FOR_QUESTION_AND_ANSWERS
 import lesniewski.pawel.uwd_android_studio.tools.Constants.END_GAME
+import lesniewski.pawel.uwd_android_studio.tools.Constants.GAME_UUID
 import lesniewski.pawel.uwd_android_studio.tools.Constants.NOT_STARTED
 import java.io.Serializable
 
@@ -40,6 +42,7 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
     //synchronizacja na gameState na wszelki wpyadek, lock
 
 
+
     @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,12 +57,14 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
             {
                 NOT_STARTED ->
                 {
-                    cntToServer()
-                    startListeningFromServer()
-                    startGame()
-                    turnOffButton()
-                    setButton(resources.getString(R.string.waitForQuestionsAndAnswers))
-                    gameState = CLIENT_WAITING_FOR_QUESTION_AND_ANSWERS
+                   if(connectToGameServer())
+                    {
+                        startListeningFromServer()
+                        startGame()
+                        turnOffButton()
+                        setButton(resources.getString(R.string.waitForQuestionsAndAnswers))
+                        gameState = CLIENT_WAITING_FOR_QUESTION_AND_ANSWERS
+                    }
 
                 }
             }
@@ -110,8 +115,11 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
         {
             cardModels.add(CardModel(ans))
             cardAdapter = CardModelAdapter(cardModels, this)
-            viewPager.adapter = cardAdapter
-            viewPager.setPadding(220,0,220,0)
+            runOnUiThread(Runnable{
+                this@ClientMechanics.viewPager.adapter = cardAdapter
+                viewPager.setPadding(220,0,220,0)
+            })
+
         }
     }
 
@@ -184,24 +192,39 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
     */
     private fun setButton(str: String)
     {
-        readyBtn.text = str
+        runOnUiThread(Runnable {
+            readyBtn.text = str
+        })
     }
     private fun turnOffButton()
     {
-        readyBtn.isClickable = false
-        readyBtn.isActivated = false
+        runOnUiThread(Runnable {
+            readyBtn.isClickable = false
+            readyBtn.isActivated = false
+        })
     }
     private fun turnOnButton()
     {
-        readyBtn.isClickable = true
-        readyBtn.isActivated = true
+        runOnUiThread(Runnable {
+            readyBtn.isClickable = true
+            readyBtn.isActivated = true
+        })
     }
 
-    private fun cntToServer() {
+    private fun connectToGameServer(): Boolean {
+
+        var tmp: BluetoothSocket? = null
 
         if(btDevice != null)
         {
-            btSocket = connectToServer(btDevice!!)!!
+            tmp = connectToServer(btDevice!!, GAME_UUID)
+        }
+
+        return if(tmp != null) {
+            btSocket = tmp
+            true
+        } else {
+            false
         }
 
     }
@@ -217,7 +240,6 @@ class ClientMechanics() : AppCompatActivity(), IFragmentChanger,
         } else {
             null
         }
-
     }
 
 

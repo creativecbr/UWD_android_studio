@@ -4,14 +4,14 @@ import java.util.*
 
 object Constants {
 
-    val APP_UUID = UUID.fromString("3b4c7719-3738-4234-94a3-22d72dbb8a74")
+    val CONNECT_UUID: UUID = UUID.fromString("3b4c7719-3738-4234-94a3-22d72dbb8a74")
+    val GAME_UUID: UUID = UUID.fromString("5795fe82-fff0-11ea-adc1-0242ac120002")
 
-
-    const val PLAYER_LIMIT = 1
     const val REQUEST_CODE_ENABLE_BT: Int = 1
     const val REQUEST_CODE_ENABLE_DISCOVERABILTY: Int = 2
     const val DISCOVERABLE_DURATION = 120 // in seconds
     const val AMOUNT_OF_ANSWERS_ON_START = 3
+    const val ATTEMPS_CONNECTION_NUMBER = 5
 
     const val STATE_LISTENING = 1
     const val STATE_CONNECTING = 2

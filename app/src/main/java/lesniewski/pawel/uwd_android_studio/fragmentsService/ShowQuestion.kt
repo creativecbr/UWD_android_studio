@@ -22,16 +22,16 @@ class ShowQuestion : Fragment() {
     ): View? {
         val v = inflater.inflate(R.layout.fragment_show_question, container, false)
 
-        getQuestionPool()
+        /*getQuestionPool()
         if(arguments?.getString("que") != null)
         {
-           questionTextPool.text = arguments?.getString("que")
-        }
+           //questionTextPool.text = arguments?.getString("que")
+        }*/
         return v
     }
 
-    private fun getQuestionPool() {
-        questionTextPool = view!!.findViewById<View>(R.id.questionTv) as TextView
-    }
+    //private fun getQuestionPool() {
+        //questionTextPool = view!!.findViewById<View>(R.id.questionTv) as TextView
+    //}
 }
 
